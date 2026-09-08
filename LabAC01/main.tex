@@ -1,0 +1,634 @@
+\documentclass[12pt]{article}
+
+% ---------- IDIOMA Y CODIFICACIÓN ----------
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+
+% ---------- TABLAS (Actividad 1: identificación de dispositivos) ----------
+\usepackage{booktabs}   % líneas de tabla profesionales (\toprule, \midrule, \bottomrule)
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage[table]{xcolor} % opcional, para color en encabezado
+\usepackage{tabularx}   % columnas que se ajustan al ancho de página
+\usepackage{longtable}  % tablas que pueden partirse entre páginas (útil si tu tabla de dispositivos es larga)
+\usepackage{caption}    % control de estilo de "Tabla X: ..."
+
+% ---------- GLOSARIO (Actividad 2) ----------
+% Enfoque simple con "description", sin necesidad de correr makeglossaries aparte
+% (evita agregar un paso extra a tu pipeline de compilación).
+\usepackage{enumitem}
+\newlist{glosario}{description}{1}
+\setlist[glosario]{
+    font=\normalfont\bfseries,
+    leftmargin=0pt,
+    labelsep=0.5em,
+    itemsep=0.5em
+}
+% Uso dentro del documento:
+%   \begin{glosario}
+%       \item[Chipset] Definición y características...
+%   \end{glosario}
+
+% ---------- PLACEHOLDER \relleno ----------
+% Uso: \relleno              -> texto de aviso genérico
+%      \relleno{Tu texto}    -> muestra tu texto en rojo (útil para ir dejando borradores)
+\newcommand{\relleno}[1][\textbf{[COMPLETAR AQUÍ]}]{\textcolor{red}{#1}}
+% ---------- CONFIGURACIONES PARA ENCABEZADO Y PORTADA ----------
+\usepackage{colortbl}
+\usepackage{float}
+
+% Definición de colores y columnas personalizadas (usadas en la portada)
+\definecolor{tablebackground}{rgb}{0.8, 0, 0}
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{N}{@{}m{0pt}@{}}
+\newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+
+% Variables de datos para la portada y encabezado
+\newcommand{\itemEmail}{ccapatinta@unsa.edu.pe}
+\newcommand{\itemStudent}{Camilo B.A. Capatinta Almanza}
+\newcommand{\itemCourse}{Lab. Arq. de computadoras}
+\newcommand{\itemCourseCode}{20240234}
+\newcommand{\itemSemester}{IV}
+\newcommand{\itemUniversity}{Universidad Nacional de San Agustín de Arequipa}
+\newcommand{\itemFaculty}{Facultad de Ingeniería de Producción y Servicios}
+\newcommand{\itemDepartment}{Departamento Académico de Ingeniería de Sistemas e Informática}
+\newcommand{\itemSchool}{Escuela Profesional de Ingeniería de Sistemas}
+\newcommand{\itemAcademic}{2026 - B}
+\newcommand{\itemInput}{01/09/2026}
+\newcommand{\itemOutput}{08/09/2026}
+\newcommand{\itemPracticeNumber}{01}
+\newcommand{\itemTheme}{Estructura de computadoras}
+
+% Configuración del encabezado y pie de página (fancyhdr)
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{40.51407pt}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+% Encabezado
+\fancyhead[L]{\raisebox{-0.2\height}{\includegraphics[width=3cm]{img/logo_episunsa.png}}}
+\fancyhead[C]{\fontsize{7}{7}\selectfont    \itemUniversity \\ \itemFaculty \\ \itemDepartment \\ \itemSchool \\ \textbf{\itemCourse}}
+\fancyhead[R]{\raisebox{-0.2\height}{\includegraphics[width=1.2cm]{img/logo_abet.png}}}
+
+% Pie de página
+\fancyfoot[L]{Estudiante Camilo Capatinta}
+\fancyfoot[C]{\itemCourse}
+\fancyfoot[R]{Página \thepage}
+
+\begin{document}
+
+% --- INICIO DE LA PORTADA ---
+\vspace*{10px}
+    
+\begin{center}  
+    \fontsize{17}{17} \textbf{ Informe de Laboratorio \itemPracticeNumber}
+\end{center}
+\centerline{\textbf{\Large Tema: \itemTheme}}
+
+\begin{flushright}
+    \begin{tabular}{|M{2.5cm}|N|}
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white} \textbf{Nota}  \\
+        \hline 
+             \\[30pt]
+        \hline          
+    \end{tabular}
+\end{flushright}    
+
+\begin{table}[h!]
+    \begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}        
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white} \textbf{Estudiante} & \color{white}\textbf{Escuela}  & \color{white}\textbf{Asignatura}   \\
+        \hline 
+        {\itemStudent \par \itemEmail} & \itemSchool & {\itemCourse \par Semestre: \itemSemester \par Código: \itemCourseCode}     \\
+        \hline          
+    \end{tabular}
+\end{table}     
+
+\begin{table}[H]
+    \begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white}\textbf{Laboratorio} & \color{white}\textbf{Tema}  & \color{white}\textbf{Duración}   \\
+        \hline 
+        \itemPracticeNumber & \itemTheme & 04 horas   \\
+        \hline 
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white}\textbf{Semestre académico} & \color{white}\textbf{Fecha de inicio}  & \color{white}\textbf{Fecha de entrega}   \\
+        \hline 
+        \itemAcademic & \itemInput &  \itemOutput  \\
+        \hline 
+    \end{tabular}
+\end{table}
+
+\newpage
+% --- FIN DE LA PORTADA ---
+
+\section{Marco Teórico}
+
+Una computadora es un dispositivo electrónico compuesto principalmente por un \textbf{procesador}, \textbf{memoria} y \textbf{dispositivos de entrada y salida}. Una de sus principales características es la capacidad de ejecutar diferentes tareas dependiendo del programa que se encuentre cargado en su memoria.
+
+\subsection{Procesador}
+
+El procesador es considerado el ``cerebro'' de la computadora. Es un circuito integrado compuesto por una gran cantidad de transistores que se encarga de realizar cálculos, procesar instrucciones y controlar el funcionamiento general del sistema. Entre sus principales componentes lógicos se encuentran la Unidad Aritmético-Lógica (ALU), los registros, la unidad de control y la memoria caché. Un ejemplo de fabricante de procesadores es \textbf{Intel}.
+
+\subsection{Memorias}
+
+Las memorias permiten almacenar temporal o permanentemente información necesaria para el funcionamiento del computador. Se pueden clasificar en diferentes tipos según su función, velocidad, capacidad y forma de almacenamiento.
+
+\subsubsection{Memoria Principal}
+
+La memoria principal comprende diferentes tecnologías utilizadas para almacenar información directamente relacionada con el funcionamiento del sistema.
+
+\paragraph{ROM (Read Only Memory)}
+
+La ROM es una memoria de solo lectura y no volátil, lo que significa que conserva la información almacenada incluso cuando el computador se encuentra apagado. Se utiliza, entre otras funciones, para almacenar el BIOS y la información necesaria para iniciar el sistema.
+
+Entre sus principales variantes se encuentran:
+
+\begin{itemize}
+\item \textbf{PROM:} puede ser programada una sola vez mediante un dispositivo especial.
+\item \textbf{EPROM:} puede borrarse mediante luz ultravioleta y posteriormente ser reprogramada.
+\item \textbf{Flash/EEPROM:} puede borrarse y reescribirse eléctricamente sin necesidad de retirar físicamente la memoria del equipo.
+\end{itemize}
+
+\paragraph{RAM (Random Access Memory)}
+
+La RAM es una memoria volátil utilizada para almacenar temporalmente los datos y programas que están siendo utilizados por el sistema. Su contenido se pierde cuando se interrumpe el suministro de energía.
+
+La RAM puede clasificarse en:
+
+\begin{itemize}
+\item \textbf{RAM estática (SRAM):} mantiene los datos mientras exista suministro de energía.
+\item \textbf{RAM dinámica (DRAM):} requiere un proceso de refresco constante para conservar la información almacenada.
+\end{itemize}
+
+Las memorias RAM pueden organizarse mediante diferentes tipos de módulos, entre ellos los \textbf{SIMM}, con 30 o 72 contactos, y los \textbf{DIMM}, con 168 contactos.
+
+\paragraph{Tipos de DRAM}
+
+La DRAM constituye una tecnología de memoria principal que se caracteriza por su bajo costo y por requerir un proceso periódico de refresco. Entre sus principales variantes se encuentran:
+
+\begin{itemize}
+\item \textbf{FPM:} una de las primeras tecnologías DRAM, con tiempos de acceso de hasta 60 ns. Fue utilizada en sistemas con procesadores 386, 486 y Pentium.
+
+\item \textbf{EDO:} permite mover bloques completos de datos en lugar de limitarse a transferir un solo byte, alcanzando tiempos de acceso de hasta 45 ns.
+
+\item \textbf{BEDO:} incorpora transferencias en ráfaga, reduciendo los tiempos de espera durante el acceso a los datos.
+
+\item \textbf{SDRAM:} memoria sincronizada con la señal de reloj del procesador, lo que permitió mejorar considerablemente el rendimiento de los sistemas de su época.
+
+\item \textbf{PC-100 / PC-133:} variantes de SDRAM certificadas para funcionar con buses de 100 MHz y 133 MHz, respectivamente.
+
+\item \textbf{DDR SDRAM:} permite realizar transferencias en ambos extremos del ciclo de reloj, aumentando el rendimiento de transferencia de datos.
+
+\item \textbf{ESDRAM:} incorpora una pequeña cantidad de memoria estática interna para acelerar los accesos a la información.
+
+\item \textbf{DRDRAM:} tecnología de 64 bits que alcanzó velocidades de hasta 800 MHz y fue desarrollada, entre otros usos, para sistemas relacionados con tarjetas gráficas AGP.
+
+\item \textbf{SLDRAM:} tecnología basada en un protocolo abierto que buscaba alcanzar velocidades superiores a 800 MHz.
+
+\end{itemize}
+
+\paragraph{SRAM (Static RAM)}
+
+La SRAM es una memoria más rápida que la DRAM, aunque presenta un costo de fabricación superior. Debido a sus características, se utiliza principalmente en sistemas de memoria caché.
+
+Entre sus tipos se encuentran:
+
+\begin{itemize}
+\item \textbf{Async SRAM:} memoria asíncrona considerada una de las tecnologías más antiguas, con tiempos de acceso aproximados de 20 a 12 ns.
+
+\item \textbf{Sync SRAM:} memoria sincronizada con el procesador, con tiempos de acceso aproximados de 12 a 8.5 ns.
+
+\item \textbf{Pipelined SRAM:} presenta una carga inicial ligeramente más lenta, pero permite realizar accesos posteriores con mayor rapidez, alcanzando tiempos aproximados de 8 a 4.5 ns.
+
+\end{itemize}
+
+\paragraph{Tag RAM}
+
+La Tag RAM almacena las direcciones asociadas con los datos que se encuentran en la memoria caché. Esto permite determinar rápidamente si un dato solicitado por el procesador se encuentra disponible en la caché.
+
+\paragraph{VRAM}
+
+La VRAM es una memoria especializada utilizada en las tarjetas gráficas. Su diseño permite que el procesador pueda escribir información mientras el monitor realiza la lectura de los datos necesarios para representar las imágenes.
+
+\paragraph{Memoria Caché}
+
+La memoria caché funciona como un nivel intermedio entre el procesador y la memoria RAM. Su objetivo es almacenar temporalmente los datos e instrucciones utilizados con mayor frecuencia, reduciendo el tiempo necesario para acceder a ellos.
+
+Entre sus principales niveles se encuentran:
+
+\begin{itemize}
+\item \textbf{L1:} se encuentra integrada en el procesador. Es muy rápida, aunque posee una capacidad relativamente pequeña, aproximadamente entre 32 y 64 KB.
+
+\item \textbf{L2:} se encuentra entre el procesador y la memoria RAM. Posee una capacidad superior a la L1, aproximadamente entre 256 KB y 1 MB.
+
+\end{itemize}
+
+\paragraph{Memoria Secundaria}
+
+La memoria secundaria corresponde a los dispositivos destinados al almacenamiento masivo y permanente de información. A diferencia de la memoria RAM, conserva los datos incluso cuando el equipo se encuentra apagado.
+
+Algunos ejemplos son los discos compactos (CD), DVD, discos duros, cintas magnéticas, memorias flash y unidades de estado sólido (SSD).
+
+\subsection{Bus}
+
+El bus es el conjunto de líneas de comunicación que permite transportar información entre los diferentes componentes de un computador. Puede considerarse como una serie de ``autopistas'' por las que circulan datos, direcciones y señales de control.
+
+Los principales tipos de bus son:
+
+\begin{itemize}
+\item \textbf{Bus de Datos:} transporta la información entre los diferentes dispositivos del sistema, como el teclado, la pantalla, los discos y otros componentes.
+
+\item \textbf{Bus de Direcciones:} indica la ubicación de memoria en la que se debe almacenar o desde la cual se debe leer determinada información.
+
+\item \textbf{Bus de Control:} transporta las señales necesarias para controlar y coordinar las operaciones realizadas por los diferentes componentes.
+
+\end{itemize}
+
+En una placa ATX típica pueden encontrarse 64 líneas destinadas al transporte de datos y 32 líneas destinadas a direcciones. Esta configuración permite direccionar más de cuatro mil millones de posiciones de memoria.
+
+\subsection{Entrada/Salida}
+
+La entrada y salida (E/S) comprende los mecanismos mediante los cuales el computador se comunica con el mundo exterior utilizando diferentes dispositivos periféricos, como teclados, impresoras, monitores y dispositivos de almacenamiento.
+
+La \textbf{Unidad de Entrada/Salida (E/S)} actúa como intermediaria entre los periféricos y el procesador. Su función consiste en gestionar las transferencias de información de acuerdo con las instrucciones proporcionadas por la Unidad de Control.
+
+Entre los principales dispositivos periféricos se encuentran:
+
+\begin{itemize}
+\item \textbf{Monitor:} dispositivo utilizado para visualizar la información procesada por el computador. Puede clasificarse según su tamaño, expresado normalmente mediante la longitud de su diagonal en pulgadas, o según la tecnología utilizada.
+
+\item \textbf{Mouse:} dispositivo de entrada utilizado para controlar el puntero y realizar diferentes acciones en la interfaz gráfica. Puede diferenciarse según su tipo de conexión, como serial, PS/2 o USB.
+
+\item \textbf{Teclado:} dispositivo de entrada utilizado principalmente para introducir caracteres y comandos. Puede clasificarse según su tipo de conector, como AT, PS/2 o USB, y según sus características adicionales, como teclados multimedia, ergonómicos o inalámbricos.
+
+\end{itemize}
+
+
+\section{Actividades}
+
+\begingroup
+\footnotesize
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+\setlength{\tabcolsep}{3pt} % Reduce un poco el espacio entre márgenes de celda
+% Redefinimos las columnas con \raggedright para evitar estiramientos y solapamientos
+\begin{longtable}{|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{2.0cm}|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{4.5cm}|>{\raggedright\arraybackslash}p{2.0cm}|}
+\caption{Tabla de Identificación de dispositivos de hardware} \label{tab:hardware} \\
+
+\hline
+\textbf{Dispositivo} & \textbf{Código ID} & \textbf{Descripción} & \textbf{Características} & \textbf{Posición} \\
+\hline
+\endfirsthead
+
+\multicolumn{5}{c}{\tablename\ \thetable{} -- continuación de la página anterior} \\
+\hline
+\textbf{Dispositivo} & \textbf{Código ID} & \textbf{Descripción} & \textbf{Características} & \textbf{Posición} \\
+\hline
+\endhead
+
+\hline \multicolumn{5}{r}{\textit{Continúa en la siguiente página}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+13th Gen Intel Core i5-13420H & Family 6, Model 186 & Procesador (CPU) & 8 núcleos, 12 hilos, 2600--4600 MHz, arquitectura x86\_64 & Procesamiento \\
+\hline
+Caché L1 & --- & Memoria caché interna & 320 KiB L1d + 384 KiB L1i (8 instancias) & Memoria \\
+\hline
+Caché L2 & --- & Memoria caché nivel 2 & 7 MiB total (5 instancias) & Memoria \\
+\hline
+Caché L3 & --- & Memoria caché nivel 3 & 12 MiB compartida (1 instancia) & Memoria \\
+\hline
+Módulo RAM SODIMM & Bank 1, Hex 0xCE & Memoria principal & DDR4, 16 GiB, 3200 MT/s, Part: \texttt{M471A2G44BM0-CWE} & Memoria \\
+\hline
+Host Bridge & \texttt{[8086:a716]} & Puente CPU-memoria-buses & Driver \texttt{igen6\_edac}, ancho 32 bits & Procesamiento \\
+\hline
+UHD Graphics & \texttt{[8086:a7a8]} & GPU integrada & Driver \texttt{i915}, VRAM compartida hasta 256 MB & Salida \\
+\hline
+Thermal Framework & \texttt{[8086:a71d]} & Gestión térmica CPU & Driver \texttt{proc\_thermal\_pci}, región 128K & Procesamiento \\
+\hline
+RST VMD Controller & \texttt{[8086:09ab]} & Gestión de volúmenes & System peripheral, sin driver por defecto & E/S \\
+\hline
+GNA Accelerator & \texttt{[8086:a74f]} & Acelerador de IA & Región de memoria 4K, IRQ 255 & Procesamiento \\
+\hline
+Crashlog \& Telemetry & \texttt{[8086:a77d]} & Diagnóstico CPU & Driver \texttt{intel\_vsec}, memoria 32K & Procesamiento \\
+\hline
+RST VMD NVMe & \texttt{[8086:a77f]} & Controlador RAID/VMD & Driver \texttt{vmd}, 3 regiones de memoria & Almacenamiento \\
+\hline
+USB 3.2 xHCI Host & \texttt{[8086:51ed]} & Controlador USB 3.2 & Driver \texttt{xhci\_hcd}, IRQ 120-127 & E/S \\
+\hline
+PCH Shared SRAM & \texttt{[8086:51ef]} & Memoria SRAM chipset & Clase RAM memory, deshabilitadas & Memoria \\
+\hline
+CNVi WiFi & \texttt{[8086:51f1]} & Red inalámbrica WiFi & Driver \texttt{iwlwifi}, interfaz \texttt{wlo1} & E/S \\
+\hline
+Serial IO I2C \#0 & \texttt{[8086:51e8]} & Bus serial I2C canal 0 & Driver \texttt{intel-lpss}, IRQ 27 & E/S \\
+\hline
+Serial IO I2C \#1 & \texttt{[8086:51e9]} & Bus serial I2C canal 1 & Driver \texttt{intel-lpss}, IRQ 52 & E/S \\
+\hline
+HECI Controller & \texttt{[8086:51e0]} & Interfaz Intel ME & Driver \texttt{mei\_me}, IRQ 162 & E/S \\
+\hline
+LPC/eSPI Controller & \texttt{[8086:519d]} & Puente ISA / LPC-eSPI & Tipo ISA bridge, ancho 32 bits & E/S \\
+\hline
+cAVS Audio & \texttt{[8086:51ca]} & Controlador de audio & Driver \texttt{snd\_hda\_intel}, card0 & Salida \\
+\hline
+SMBus Host & \texttt{[8086:51a3]} & Bus SMBus (sensores) & Driver \texttt{i801\_smbus}, puertos I/O \texttt{efa0} & E/S \\
+\hline
+PCH SPI Controller & \texttt{[8086:51a4]} & Acceso memoria flash BIOS & Driver \texttt{intel-spi}, región 4K & E/S \\
+\hline
+PCIe 4.0 Graphics Port & \texttt{[8086:a74d]} & Puente PCIe NVMe & Driver \texttt{pcieport}, IRQ 147 & E/S \\
+\hline
+Micron 2400 NVMe SSD & \texttt{[1344:5413]} & Unidad de estado sólido & Driver \texttt{nvme}, PCIe, 512 GB & Almacenamiento \\
+\hline
+Hub USB 2.0 / 3.0 & \texttt{1d6b:0002} & Puertos USB raíz & Velocidad High Speed y SuperSpeed+ & E/S \\
+\hline
+FocalTech FT9349 & \texttt{2808:a99a} & Lector biométrico & USB 1.1, clase Diagnostic (100 mA) & Entrada \\
+\hline
+Webcam HD UVC & \texttt{13d3:54a2} & Cámara web integrada & Driver \texttt{uvcvideo}, resolución 1280x720 & Entrada \\
+\hline
+AX201 Bluetooth & \texttt{8087:0026} & Adaptador Bluetooth & USB 2.0, clase Wireless/Bluetooth & E/S \\
+\hline
+Placa madre ASUSTeK & \texttt{SC51NBCV} & Motherboard X1605VA & Versión 1.0, aloja CPU, RAM y componentes & --- \\
+\hline
+BIOS/UEFI & \texttt{X1605VA.310} & Firmware de arranque & American Megatrends, ROM 32 MiB & --- \\
+\hline
+Teclado y Touchpad & --- & Dispositivos de entrada & AT Set 2 y Touchpad multitáctil ASUF1303 & Entrada \\
+\hline
+
+\end{longtable}
+\endgroup
+
+\subsection{Clasificación de dispositivos}
+
+\begingroup
+\footnotesize
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{|p{3.5cm}|p{4.0cm}|p{6.5cm}|}
+\caption{Clasificación de dispositivos} \label{tab:clasificacion} \\
+
+\hline
+\textbf{Categoría} & \textbf{Dispositivo / Componente} & \textbf{Descripción y Especificaciones} \\
+\hline
+\endfirsthead
+
+\multicolumn{3}{c}{\tablename\ \thetable{} -- continuación de la página anterior} \\
+\hline
+\textbf{Categoría} & \textbf{Dispositivo / Componente} & \textbf{Descripción y Especificaciones} \\
+\hline
+\endhead
+
+\hline \multicolumn{3}{r}{\textit{Continúa en la siguiente página}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+Plataforma / Placa Base & ASUS X1605VA (Vivobook) & Fabricante ASUSTeK, Versión 1.0. Firmware AMI BIOS X1605VA.310. \\
+\hline
+Procesamiento Central (CPU) & Intel Core i5-13420H (13ª Gen) & 8 núcleos, 12 hilos, frecuencia máxima de 4.6 GHz, arquitectura x86\_64, 12 MiB de Caché L3. \\
+\hline
+Procesamiento Gráfico (GPU) & Intel Raptor Lake-P UHD Graphics & Controlador de video integrado, gestionado por el driver \texttt{i915}. \\
+\hline
+Memoria Principal (RAM) & 16 GB SODIMM DDR4 (Samsung) & Velocidad de 3200 MT/s, modelo M471A2G44BM0-CWE. Capacidad máxima de 64 GB (1 ranura ocupada, 1 libre). \\
+\hline
+Almacenamiento Secundario & SSD Micron 2400 (512 GB) & Unidad NVMe PCIe (DRAM-less), modelo MTFDKBA512QFM. Dividida en particiones EFI, boot y sistema/home. \\
+\hline
+Conectividad de Red & Intel Raptor Lake PCH CNVi WiFi & Interfaz de red inalámbrica (\texttt{wlo1}), operando bajo el controlador \texttt{iwlwifi}. \\
+\hline
+Conectividad Inalámbrica & Intel AX201 Bluetooth & Adaptador Bluetooth integrado vía bus USB. \\
+\hline
+Audio / Multimedia & Intel Raptor Lake-P/U/H cAVS & Controlador de hardware de audio de alta definición (\texttt{snd\_hda\_intel}). \\
+\hline
+Entrada de Video & USB2.0 HD UVC WebCam & Cámara web integrada (Azurewave / IMC Networks) a 480 Mbps. \\
+\hline
+Entrada / Interfaz Humana & Teclado y Touchpad ASUS & Teclado interno (AT Translated Set 2) y panel táctil ASUF1303:00 (multigestos). \\
+\hline
+Sensores / Diagnóstico & FocalTech FT9349 ESS & Dispositivo USB clasificado como diagnóstico (asociado a lectores de huellas digitales). \\
+\hline
+Controladores y Buses & Chipset y Puentes Intel & Incluye Host Bridge, ISA Bridge (LPC/eSPI), controlador USB 3.2 xHCI, e Intel RST VMD. \\
+\hline
+
+\end{longtable}
+\endgroup
+
+\subsection{Glosario de términos técnicos}
+
+\begin{itemize}
+    \item \textbf{Chipset:} Conjunto de circuitos integrados en la placa madre que gestiona la comunicación entre CPU, memoria y periféricos. Características: incluye controlador de memoria, controlador PCIe y controladores de E/S; determina qué tipo de RAM y CPU soporta la placa.
+
+    \item \textbf{Northbridge (Puente Norte):} Chip (histórico, hoy integrado al CPU en sistemas modernos) que conecta la CPU con la RAM y el bus gráfico de alta velocidad. Características: maneja el bus frontal (FSB) y el acceso a memoria a alta velocidad.
+
+    \item \textbf{Southbridge (Puente Sur):} Chip que gestiona los dispositivos de E/S más lentos (USB, SATA, audio, red). Características: se comunica con el Northbridge y expone los buses PCI/PCIe secundarios.
+
+    \item \textbf{BIOS/UEFI:} Firmware almacenado en memoria no volátil que inicializa el hardware al encender el equipo. Características: reside en memoria flash; UEFI soporta discos GPT y arranque en modo gráfico, a diferencia del BIOS clásico limitado a MBR.
+
+    \item \textbf{PCI (Peripheral Component Interconnect):} Bus de interconexión de componentes periféricos usado para conectar tarjetas de expansión a la placa madre. Características: transferencia en paralelo, ancho de bus típico de 32/64 bits, velocidad hasta 133 MB/s.
+
+    \item \textbf{PCIe (PCI Express):} Evolución serial del bus PCI, organizado en carriles (lanes). Características: cada lane (x1, x4, x8, x16) transmite datos en full-duplex; PCIe 4.0 alcanza hasta 16 GT/s por lane.
+
+    \item \textbf{DIMM (Dual In-line Memory Module):} Módulo de memoria RAM con contactos independientes en cada cara. Características: 168 contactos (SDRAM) o más en DDR/DDR4/DDR5; se inserta en las ranuras de memoria de la placa madre.
+
+    \item \textbf{SIMM (Single In-line Memory Module):} Módulo de memoria antiguo con contactos duplicados a ambos lados conectados eléctricamente entre sí. Características: 30 o 72 contactos, usado hasta la era del Pentium.
+
+    \item \textbf{SATA (Serial ATA):} Interfaz de conexión para discos duros y unidades ópticas. Características: transferencia serial punto a punto; SATA III alcanza hasta 6 Gbps.
+
+    \item \textbf{AHCI (Advanced Host Controller Interface):} Especificación que permite a los controladores SATA soportar funciones avanzadas como hot-swap y NCQ. Características: reemplaza el modo IDE heredado; mejora el rendimiento en accesos concurrentes al disco.
+
+    \item \textbf{USB (Universal Serial Bus):} Bus estándar para conectar periféricos externos. Características: USB 2.0 hasta 480 Mbps, USB 3.0 hasta 5 Gbps, USB4 hasta 40 Gbps; soporta conexión en caliente (hot-plug).
+
+    \item \textbf{ACPI (Advanced Configuration and Power Interface):} Estándar que permite al sistema operativo controlar la administración de energía y configuración del hardware. Características: gestiona estados de suspensión (S0-S5) y control térmico.
+
+    \item \textbf{IRQ (Interrupt Request / Solicitud de Interrupción):} Señal que un dispositivo envía al procesador para solicitar atención inmediata. Características: cada dispositivo tiene asignado un número de IRQ; permite manejo asíncrono de eventos de E/S.
+
+    \item \textbf{DMA (Direct Memory Access / Acceso Directo a Memoria):} Mecanismo que permite a los periféricos transferir datos hacia/desde la memoria sin intervención constante de la CPU. Características: libera ciclos de CPU; usado por tarjetas de sonido, red y almacenamiento.
+
+    \item \textbf{Driver (Controlador de dispositivo):} Software que permite al sistema operativo comunicarse con un dispositivo de hardware específico. Características: opera en espacio de kernel o usuario; traduce llamadas del SO a comandos que el hardware entiende.
+
+    \item \textbf{Firmware:} Software de bajo nivel embebido en un chip de memoria no volátil que controla el funcionamiento básico de un dispositivo. Características: normalmente en memoria Flash/EEPROM; actualizable mediante procesos de "flasheo".
+
+    \item \textbf{Bus del sistema:} Conjunto de líneas eléctricas que transportan datos, direcciones y señales de control entre los componentes del computador. Características: se subdivide en bus de datos, bus de direcciones y bus de control.
+
+    \item \textbf{Memoria caché (L1/L2/L3):} Memoria SRAM de alta velocidad ubicada entre el procesador y la RAM para reducir tiempos de acceso. Características: L1 dentro del núcleo (32-64 KB), L2 por núcleo o compartida (256 KB-1 MB), L3 compartida entre núcleos (varios MB).
+
+    \item \textbf{VRAM (Video RAM):} Memoria dedicada de la tarjeta gráfica para almacenar datos de video/texturas. Características: accesible simultáneamente por GPU y para salida a pantalla; tipos comunes GDDR5/GDDR6.
+
+    \item \textbf{Vendor ID / Device ID (Código PCI ID):} Identificadores hexadecimales únicos asignados a cada fabricante (Vendor ID) y modelo de dispositivo (Device ID). Características: formato \texttt{VEN\_XXXX\&DEV\_XXXX} en Windows o \texttt{XXXX:XXXX} en Linux (\texttt{lspci -nn}); permite identificar el driver correcto.
+\end{itemize}
+
+\section{Cuestionario}
+
+\begin{enumerate}
+
+    \item \textbf{Modelos de arquitecturas de computadoras}
+
+    \begin{itemize}
+        \item \textbf{Arquitectura de Von Neumann:} Se caracteriza por utilizar un espacio de memoria unificado para almacenar tanto las instrucciones del programa como los datos. Utiliza un único bus de datos y direcciones, lo que significa que la CPU no puede leer una instrucción y leer/escribir datos simultáneamente. Esto genera el conocido ``cuello de botella de Von Neumann'', pero es un diseño más simple y económico, base de la mayoría de computadoras modernas de propósito general.
+
+        \item \textbf{Arquitectura Harvard:} A diferencia del modelo anterior, separa físicamente la memoria y los buses para los datos y las instrucciones. Esto permite a la CPU acceder a ambos simultáneamente, eliminando el cuello de botella y mejorando drásticamente el rendimiento. Aunque es más costosa y compleja, se utiliza extensamente en microcontroladores, procesadores de señales digitales (DSP) y en el diseño interno de la memoria caché de las CPUs modernas (arquitectura Harvard modificada).
+    \end{itemize}
+
+
+    \item \textbf{Principales sistemas de unidad de procesamiento (CPU)}
+
+    \begin{itemize}
+        \item \textbf{Intel (Arquitectura Core/x86):} Emplea un diseño híbrido que combina núcleos de rendimiento (P-cores) para tareas intensivas y núcleos de eficiencia (E-cores) para procesos en segundo plano. Destaca por su alta frecuencia de reloj, compatibilidad con tecnologías como Thunderbolt y optimización profunda con Windows.
+
+        \item \textbf{AMD (Arquitectura Zen/x86):} Utiliza un diseño basado en \textit{chiplets}, lo que permite alta escalabilidad y menor costo de fabricación. Sus procesadores de gama alta incluyen la tecnología 3D V-Cache (memoria apilada verticalmente), lo que acelera masivamente el rendimiento en cargas de trabajo de baja latencia como los videojuegos y la simulación.
+
+        \item \textbf{Apple (Arquitectura Apple Silicon/ARM):} Implementa sistemas en chip (SoC) donde la CPU, GPU y la memoria unificada están en la misma matriz. Su principal característica es la eficiencia térmica y energética líder en la industria, ofreciendo un alto rendimiento por vatio y una integración nativa de motores neuronales (Neural Engine) para inteligencia artificial.
+    \end{itemize}
+
+
+    \item \textbf{Principales sistemas de almacenamiento (Unidades de memoria/SSD)}
+
+    \begin{itemize}
+        \item \textbf{Samsung (Línea NVMe PCIe):} Sus unidades de estado sólido de gama alta utilizan tecnología V-NAND (3D NAND) de cientos de capas. Se caracterizan por sus controladores propios que minimizan el estrangulamiento térmico y alcanzan velocidades de lectura/escritura secuencial superiores a los 14,000 MB/s bajo el estándar PCIe 5.0.
+
+        \item \textbf{Western Digital (WD Black):} Enfocados en el rendimiento sostenido para bases de datos y \textit{gaming}. Emplean memoria flash BiCS NAND, altos niveles de IOPS (operaciones de entrada/salida por segundo) y perfiles de firmware altamente agresivos apoyados por disipadores térmicos pasivos.
+
+        \item \textbf{Micron (Crucial):} Pioneros en el desarrollo de chips NAND TLC de ultra alta densidad (más de 232 capas). Sus sistemas de almacenamiento integran soporte avanzado para Microsoft DirectStorage, permitiendo a la GPU acceder a los datos del SSD directamente sin saturar la CPU.
+    \end{itemize}
+
+
+    \item \textbf{Principales sistemas de Entrada/Salida (E/S)}
+
+    \begin{itemize}
+        \item \textbf{Intel (Controladores Thunderbolt):} Sus sistemas de E/S dominan la conectividad periférica de alta gama. La interfaz Thunderbolt ofrece un enorme ancho de banda (hasta 120 Gbps bidireccionales), permitiendo la conexión en cadena de monitores de ultra alta resolución, almacenamiento externo PCIe y suministro de energía bidireccional bajo un solo cable tipo C.
+
+        \item \textbf{NVIDIA (Unidades de Procesamiento de Datos - DPU):} A través de su arquitectura Mellanox, desarrollan sistemas de E/S de red avanzados (SmartNICs). Descargan el procesamiento de red, almacenamiento y seguridad de la CPU central hacia un procesador dedicado en la tarjeta de red, manejando anchos de banda masivos (hasta 400 Gb/s) para centros de datos.
+
+        \item \textbf{Logitech (Periféricos de usuario final):} Líder en la interfaz humano-computadora. Sus sistemas de E/S integran conectividad inalámbrica de latencia ultrabaja (tecnología Lightspeed), sensores ópticos de alta precisión que funcionan sobre cristal y sistemas de carga electromagnética continua en periféricos de entrada.
+    \end{itemize}
+
+
+    \item \textbf{Cuadro comparativo: Laptops top del mercado internacional (2026)}
+
+    \begin{center}
+    \begin{tabular}{|p{3.2cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
+        \hline
+        \textbf{Característica} &
+        \textbf{Apple MacBook Pro 16 (M4 Max)} &
+        \textbf{Dell XPS 16 (Intel Core Ultra 9)} &
+        \textbf{ASUS ROG Zephyrus G16 (AMD Ryzen 9)} \\
+        \hline
+
+        \textbf{Procesador (CPU)} &
+        Apple M4 Max (ARM, 16 núcleos) &
+        Intel Core Ultra 9 &
+        AMD Ryzen 9 9000 (Zen 5) \\
+        \hline
+
+        \textbf{Arquitectura de Memoria} &
+        Hasta 128 GB unificada &
+        Hasta 64 GB LPDDR5X &
+        Hasta 64 GB DDR5 \\
+        \hline
+
+        \textbf{Almacenamiento} &
+        SSD NVMe, hasta 8 TB &
+        SSD PCIe 4.0 NVMe, 4 TB &
+        SSD PCIe 5.0 NVMe, 4 TB \\
+        \hline
+
+        \textbf{Pantalla} &
+        Liquid Retina XDR (Mini-LED), 120Hz &
+        OLED táctil, 120Hz &
+        ROG Nebula Display (OLED), 240Hz \\
+        \hline
+
+        \textbf{Enfoque Principal} &
+        Edición/creación y eficiencia &
+        Productividad y diseño &
+        Rendimiento extremo, \textit{gaming} y 3D \\
+        \hline
+    \end{tabular}
+    \end{center}
+
+
+    \item \textbf{Cuadro comparativo: Teléfonos inteligentes top del mercado internacional (2026)}
+
+    \begin{center}
+    \begin{tabular}{|p{3.2cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
+        \hline
+        \textbf{Característica} &
+        \textbf{Apple iPhone 17 Pro Max} &
+        \textbf{Samsung Galaxy S26 Ultra} &
+        \textbf{Google Pixel 10 Pro} \\
+        \hline
+
+        \textbf{Procesador / SoC} &
+        A19 Pro (3nm) &
+        Snapdragon 8 Gen 4 &
+        Google Tensor G5 \\
+        \hline
+
+        \textbf{Memoria RAM} &
+        12 GB LPDDR5X &
+        16 GB LPDDR5X &
+        16 GB LPDDR5X \\
+        \hline
+
+        \textbf{Pantalla} &
+        6.9" Retina XDR OLED &
+        6.8" AMOLED 2X &
+        6.7" Actua Display \\
+        \hline
+
+        \textbf{Sistema de Cámaras} &
+        Triple 48MP (5x óptico) &
+        Cuádruple: 200MP + zoom dual &
+        Triple 50MP \\
+        \hline
+
+        \textbf{Batería / Carga} &
+        $\sim$4700 mAh, MagSafe 25W &
+        $\sim$5000 mAh, 45W &
+        $\sim$5050 mAh, Qi2 \\
+        \hline
+    \end{tabular}
+    \end{center}
+
+
+    \item \textbf{Tendencias futuras en arquitectura de computadoras}
+
+    \begin{itemize}
+        \item \textbf{Computación Cuántica:} Reemplazo de los bits tradicionales (0 o 1) por \textit{qubits} que pueden existir en múltiples estados simultáneamente (superposición). Modificará drásticamente la arquitectura del hardware para realizar simulaciones moleculares, criptografía y análisis de sistemas complejos a velocidades inalcanzables para procesadores convencionales.
+
+        \item \textbf{Computación Neuromórfica:} Arquitecturas de hardware inspiradas en el funcionamiento del cerebro humano, utilizando redes de neuronas artificiales a nivel de silicio (\textit{spiking neural networks}). Este modelo abandona la arquitectura tradicional para procesar información de forma paralela con un consumo de energía minúsculo, ideal para tareas de IA periférica e inferencia de datos.
+
+        \item \textbf{Procesadores Específicos de Dominio (DSA) y Chiplets:} La Ley de Moore se ralentiza, por lo que las futuras arquitecturas dependerán menos de CPUs de propósito general y más de aceleradores dedicados (NPUs, DPUs, TPUs) empaquetados juntos en un formato de \textit{chiplet}. Esto permite mezclar y combinar diferentes tipos de procesamiento en un solo sustrato interconectado.
+
+        \item \textbf{Fotónica de Silicio:} Sustitución de los tradicionales buses de datos de cobre por interconexiones ópticas. El uso de la luz para transferir datos entre la memoria y el procesador, o entre múltiples chips, eliminará la generación de calor limitante y multiplicará exponencialmente el ancho de banda, erradicando los cuellos de botella actuales de Entrada/Salida.
+    \end{itemize}
+
+\end{enumerate}
+
+\section{Conclusiones}
+\begin{enumerate}
+    \item \textbf{Sobre la Arquitectura Web y Protocolos:} El análisis mediante herramientas de inspección de red (\textit{DevTools}) permitió evidenciar el funcionamiento práctico del modelo cliente-servidor a través de transacciones HTTP, demostrando cómo las cabeceras de metadatos, los códigos de estado y la estructura semántica en HTML5 optimizan la accesibilidad y la correcta entrega de recursos web.
+    
+    \item \textbf{Sobre el Análisis de Hardware y Componentes:} La auditoría del sistema portátil ASUS Vivobook mediante comandos de Linux (\texttt{lshw}, \texttt{lscpu}, \texttt{dmidecode}) confirmó la integración eficiente de componentes de alto rendimiento —como el procesador Intel Core i5 de 13ª generación y la memoria RAM DDR4—, permitiendo clasificar adecuadamente las unidades de procesamiento, almacenamiento y periféricos del equipo.
+    
+    \item \textbf{Sobre la Gestión de Versiones y Buenas Prácticas:} La implementación de Git y la estructuración del repositorio remoto en GitHub bajo un flujo de trabajo disciplinado (\textit{commits} descriptivos, control de ramas y asignación de colaboradores) garantizaron la trazabilidad, organización y seguridad del código fuente desarrollado a lo largo de la práctica.
+\end{enumerate}
+
+\end{document}
