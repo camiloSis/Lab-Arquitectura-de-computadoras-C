@@ -3,9 +3,12 @@
 % ---------- IDIOMA Y CODIFICACIÓN ----------
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
+\usepackage{amsmath}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{setspace}
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{circuits.logic.US}
 
 % ---------- TABLAS (Actividad 1: identificación de dispositivos) ----------
 \usepackage{booktabs}   % líneas de tabla profesionales (\toprule, \midrule, \bottomrule)
@@ -59,7 +62,7 @@
 \newcommand{\itemSchool}{Escuela Profesional de Ingeniería de Sistemas}
 \newcommand{\itemAcademic}{2026 - B}
 \newcommand{\itemInput}{15/09/2026}
-\newcommand{\itemOutput}{22/09/2026}
+\newcommand{\itemOutput}{29/09/2026}
 \newcommand{\itemPracticeNumber}{02}
 \newcommand{\itemTheme}{Sistemas Digitales}
 
@@ -138,16 +141,723 @@
 \newpage
 % --- FIN DE LA PORTADA ---
 
+% ============================================================
+% Sección: Actividades
+% Diseño e implementación de un sumador total de un bit
+% Simulador de Circuitos Digitales 0.9.5 (tourdigital.net)
+% ============================================================
 \section{Actividades}
 
+% Marco auxiliar para reservar el espacio de una captura de pantalla.
+% Para usar una imagen real, reemplazar la llamada por
+% \includegraphics[width=\linewidth]{ruta/imagen.png}
+\providecommand{\marcocaptura}[2]{%
+  \fbox{\parbox[c][#1][c]{0.93\linewidth}{\centering\itshape #2}}}
+
+Esta sección documenta el diseño, la implementación y la demostración de un
+\textbf{sumador total de un bit} con acarreo de entrada y acarreo de salida.
+El trabajo abarca desde la tabla de verdad y la simplificación de las funciones
+lógicas hasta el armado del circuito con circuitos integrados TTL en el
+simulador y su verificación.
+
+% ------------------------------------------------------------
+\subsection{Objetivos}
+
+\subsubsection{Objetivo general}
+
+Diseñar, implementar y verificar en un simulador de circuitos digitales un
+sumador total de un bit, con acarreo de entrada y acarreo de salida.
+
+\subsubsection{Objetivos específicos}
+
 \begin{itemize}
-    \item Diseñar e implementar un sumador total de un bit, con acarreo de entrada y salida.
-    \item Desarrollar el diseño y la implementación de un sumador total de un bit (con acarreo de entrada y salida). El diseño debe contener la tabla de verdad, los mini-términos, las funciones lógicas para la suma y el acarreo de salida.
-    \item Luego de obtener las funciones lógicas debe desarrollar las simplificaciones y finalmente elaborar el circuito lógico.
-    \item El circuito lógico se debe implementar en el simulador de circuitos digitales o similares.
-    \item Finalmente, demostrar el diseño y el funcionamiento del sistema digital denominado sumador total.
+  \item Elaborar la tabla de verdad del sumador total a partir de la suma
+        aritmética de tres bits.
+  \item Obtener los minitérminos y las funciones lógicas canónicas de la suma
+        ($S$) y del acarreo de salida ($C_{out}$).
+  \item Simplificar las funciones mediante álgebra booleana y mapa de Karnaugh.
+  \item Elaborar el circuito lógico resultante y determinar las compuertas
+        necesarias.
+  \item Implementar el circuito en el simulador utilizando los circuitos
+        integrados 7486, 7408 y 7432.
+  \item Comprobar las ocho combinaciones de entrada y comparar los resultados
+        observados con la tabla de verdad teórica.
+  \item Demostrar el funcionamiento del sistema digital mediante casos
+        representativos de suma.
 \end{itemize}
 
+% ------------------------------------------------------------
+\subsection{Fundamento teórico}
+
+Un \textbf{sumador total} (\textit{full adder}) es un circuito combinacional
+que suma tres bits: los dos bits a sumar, $A$ y $B$, y el acarreo de entrada
+$C_{in}$ proveniente de una etapa anterior. Produce dos salidas: el bit de suma
+$S$ y el acarreo de salida $C_{out}$, que se propaga a la etapa siguiente. Como
+la suma máxima es $1+1+1=3=11_2$, dos bits de salida son suficientes:
+\begin{equation}
+  A + B + C_{in} = 2\,C_{out} + S .
+\end{equation}
+
+El sumador total puede construirse con dos semisumadores y una compuerta OR. El
+primer semisumador suma $A$ y $B$; el segundo suma ese resultado con $C_{in}$.
+Las compuertas empleadas se resumen en la Tabla~\ref{tab:compuertas}.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Compuertas lógicas utilizadas y su circuito integrado TTL.}
+  \label{tab:compuertas}
+  \begin{tabular}{lccc}
+    \toprule
+    Compuerta & Expresión & Circuito integrado & Compuertas por chip \\
+    \midrule
+    XOR (O exclusivo) & $A \oplus B$ & 7486 & 4 \\
+    AND (Y)           & $A \cdot B$  & 7408 & 4 \\
+    OR (O)            & $A + B$      & 7432 & 4 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% ------------------------------------------------------------
+\subsection{Herramientas y materiales}
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Herramientas y materiales de la práctica.}
+  \label{tab:materiales}
+  \begin{tabular}{p{7cm}c}
+    \toprule
+    Elemento & Cantidad \\
+    \midrule
+    Simulador de Circuitos Digitales 0.9.5 (tourdigital.net), ejecutado en Linux mediante Bottles & 1 \\
+    Circuito integrado 7486 (4 compuertas XOR de 2 entradas) & 1 \\
+    Circuito integrado 7408 (4 compuertas AND de 2 entradas) & 1 \\
+    Circuito integrado 7432 (4 compuertas OR de 2 entradas)  & 1 \\
+    Interruptores del módulo digital (entradas $A$, $B$ y $C_{in}$) & 3 \\
+    LED del módulo digital (salidas $S$ y $C_{out}$) & 2 \\
+    Cables de conexión sobre la protoboard virtual & 20 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% ------------------------------------------------------------
+\subsection{Diseño del sumador total de un bit}
+
+\subsubsection{Definición de entradas y salidas}
+
+\begin{itemize}
+  \item \textbf{Entradas:} $A$, $B$ y $C_{in}$ (acarreo de entrada).
+  \item \textbf{Salidas:} $S$ (suma) y $C_{out}$ (acarreo de salida).
+\end{itemize}
+
+\subsubsection{Tabla de verdad}
+
+La Tabla~\ref{tab:verdad} contiene las ocho combinaciones posibles de las
+entradas. La columna de la suma decimal permite comprobar cada fila: la suma de
+los tres bits se expresa en binario como $C_{out}S$.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Tabla de verdad del sumador total de un bit.}
+  \label{tab:verdad}
+  \begin{tabular}{ccccccc}
+    \toprule
+    & \multicolumn{3}{c}{Entradas} & & \multicolumn{2}{c}{Salidas} \\
+    \cmidrule(lr){2-4}\cmidrule(lr){6-7}
+    $m_i$ & $A$ & $B$ & $C_{in}$ & $A+B+C_{in}$ & $C_{out}$ & $S$ \\
+    \midrule
+    $m_0$ & 0 & 0 & 0 & 0 & 0 & 0 \\
+    $m_1$ & 0 & 0 & 1 & 1 & 0 & 1 \\
+    $m_2$ & 0 & 1 & 0 & 1 & 0 & 1 \\
+    $m_3$ & 0 & 1 & 1 & 2 & 1 & 0 \\
+    $m_4$ & 1 & 0 & 0 & 1 & 0 & 1 \\
+    $m_5$ & 1 & 0 & 1 & 2 & 1 & 0 \\
+    $m_6$ & 1 & 1 & 0 & 2 & 1 & 0 \\
+    $m_7$ & 1 & 1 & 1 & 3 & 1 & 1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Explicación de la tabla.} Cada fila corresponde a un minitérmino
+$m_i$, donde $i$ es el valor decimal del número binario $ABC_{in}$. Del análisis
+de las columnas de salida se observa lo siguiente:
+\begin{itemize}
+  \item $S = 1$ cuando la cantidad de entradas en 1 es \textbf{impar} (filas
+        $m_1$, $m_2$, $m_4$ y $m_7$). Es decir, $S$ funciona como un detector de
+        paridad impar.
+  \item $C_{out} = 1$ cuando hay \textbf{dos o más} entradas en 1 (filas $m_3$,
+        $m_5$, $m_6$ y $m_7$). Es decir, $C_{out}$ funciona como una función de
+        mayoría.
+  \item Las columnas $C_{out}S$ reproducen la suma aritmética en binario: por
+        ejemplo, en $m_7$ la suma es $3$, que en binario es $11_2$.
+\end{itemize}
+
+\subsubsection{Minitérminos y funciones canónicas}
+
+Se toman las filas donde cada salida vale 1 y se escribe el minitérmino
+correspondiente (variable directa si vale 1, variable negada si vale 0):
+\begin{align}
+  S &= \sum m(1,2,4,7) \nonumber \\
+    &= \overline{A}\,\overline{B}\,C_{in} + \overline{A}\,B\,\overline{C_{in}}
+       + A\,\overline{B}\,\overline{C_{in}} + A\,B\,C_{in}, \\[4pt]
+  C_{out} &= \sum m(3,5,6,7) \nonumber \\
+    &= \overline{A}\,B\,C_{in} + A\,\overline{B}\,C_{in}
+       + A\,B\,\overline{C_{in}} + A\,B\,C_{in}.
+\end{align}
+
+\subsubsection{Simplificación de la función de suma $S$}
+
+Se agrupan los términos por $C_{in}$ y $\overline{C_{in}}$:
+\begin{align}
+  S &= C_{in}\left(\overline{A}\,\overline{B} + A\,B\right)
+       + \overline{C_{in}}\left(\overline{A}\,B + A\,\overline{B}\right) \nonumber \\
+    &= C_{in}\,\overline{(A \oplus B)} + \overline{C_{in}}\,(A \oplus B)
+       \nonumber \\
+    &= A \oplus B \oplus C_{in}.
+\end{align}
+Se utilizó que $\overline{A}\,B + A\,\overline{B} = A \oplus B$ y que
+$\overline{A}\,\overline{B} + A\,B = \overline{A \oplus B}$. Además, la
+expresión $X\,\overline{Y}+\overline{X}\,Y = X\oplus Y$ aplicada con
+$X = C_{in}$ y $Y = A\oplus B$ da el resultado final.
+
+\subsubsection{Simplificación del acarreo de salida $C_{out}$}
+
+\paragraph{Mediante mapa de Karnaugh.} Las columnas se ordenan en código Gray
+($00, 01, 11, 10$) para que celdas adyacentes difieran en una sola variable
+(Figura~\ref{fig:karnaugh}).
+
+\begin{figure}[!htbp]
+  \centering
+  \begin{tikzpicture}[x=1.3cm,y=1.0cm,font=\small]
+    % Encabezados
+    \node at (-1.35,1.25) {$A \backslash BC_{in}$};
+    \foreach \x/\l in {0/00,1/01,2/11,3/10} { \node at (\x,1.0) {\l}; }
+    \node at (-0.95,0)  {0};
+    \node at (-0.95,-1) {1};
+    % Cuadrícula
+    \draw (-0.5,0.5) rectangle (3.5,-1.5);
+    \draw (-0.5,-0.5) -- (3.5,-0.5);
+    \foreach \x in {0.5,1.5,2.5} { \draw (\x,0.5) -- (\x,-1.5); }
+    % Valores de Cout
+    \node at (0,0) {0}; \node at (1,0) {0}; \node at (2,0) {1}; \node at (3,0) {0};
+    \node at (0,-1) {0}; \node at (1,-1) {1}; \node at (2,-1) {1}; \node at (3,-1) {1};
+    % Grupos
+    \draw[red!70!black,thick,rounded corners=5pt]
+         (1.62,-0.62) rectangle (3.38,-1.38);
+    \draw[blue!70!black,thick,dashed,rounded corners=5pt]
+         (0.58,-0.55) rectangle (2.42,-1.45);
+    \draw[green!45!black,thick,rounded corners=5pt]
+         (1.68,0.40) rectangle (2.32,-1.40);
+    % Leyenda
+    \node[red!70!black,anchor=west]        at (4.0,0.1)  {Grupo $AB$};
+    \node[blue!70!black,anchor=west]       at (4.0,-0.6) {Grupo $A\,C_{in}$ (discontinuo)};
+    \node[green!45!black,anchor=west]      at (4.0,-1.3) {Grupo $B\,C_{in}$};
+  \end{tikzpicture}
+  \caption{Mapa de Karnaugh de $C_{out}$ con sus tres agrupaciones de dos
+  unos.}
+  \label{fig:karnaugh}
+\end{figure}
+
+Los tres grupos de dos celdas dan:
+\begin{equation}
+  C_{out} = A\,B + A\,C_{in} + B\,C_{in}.
+\end{equation}
+
+\paragraph{Mediante álgebra booleana.} Se agrupan los términos para hacer
+aparecer el XOR de la suma:
+\begin{align}
+  C_{out} &= \overline{A}\,B\,C_{in} + A\,\overline{B}\,C_{in}
+             + A\,B\,\overline{C_{in}} + A\,B\,C_{in} \nonumber \\
+          &= C_{in}\left(\overline{A}\,B + A\,\overline{B}\right)
+             + A\,B\left(\overline{C_{in}} + C_{in}\right) \nonumber \\
+          &= C_{in}\,(A \oplus B) + A\,B.
+\end{align}
+
+\paragraph{Elección de la forma para el circuito.} Las dos expresiones son
+equivalentes, pero la segunda reutiliza la salida $A\oplus B$ que ya se calcula
+para la suma. La Tabla~\ref{tab:costo} compara ambas alternativas.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Comparación de las dos formas de implementar $C_{out}$
+  (incluye las dos compuertas XOR de $S$).}
+  \label{tab:costo}
+  \begin{tabular}{lcccc}
+    \toprule
+    Forma de $C_{out}$ & XOR & AND & OR & Total \\
+    \midrule
+    $A B + A C_{in} + B C_{in}$ & 2 & 3 & 2 & 7 \\
+    $A B + C_{in}(A \oplus B)$  & 2 & 2 & 1 & \textbf{5} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Se elige la segunda forma porque reduce el circuito de siete a cinco
+compuertas, manteniendo los mismos tres circuitos integrados.
+
+\subsubsection{Ecuaciones finales}
+
+Definiendo la señal intermedia $X = A \oplus B$, el diseño queda:
+\begin{align}
+  X       &= A \oplus B, \\
+  S       &= X \oplus C_{in}, \\
+  C_{out} &= A\,B + C_{in}\,X.
+\end{align}
+
+\subsubsection{Circuito lógico}
+
+La Figura~\ref{fig:logico} muestra el circuito lógico. La salida $X$ de la
+primera compuerta XOR se usa en dos lugares: en la segunda XOR (para obtener
+$S$) y en la segunda AND (para el acarreo).
+
+\begin{figure}[!htbp]
+  \centering
+  \begin{tikzpicture}[circuit logic US, every circuit symbol/.style={thick},
+                      font=\small, scale=0.9, transform shape]
+    % Compuertas
+    \node[xor gate US, draw, logic gate inputs=nn] (xor1) at (3,4)   {};
+    \node[and gate US, draw, logic gate inputs=nn] (and1) at (3,0.4) {};
+    \node[xor gate US, draw, logic gate inputs=nn] (xor2) at (8,4)   {};
+    \node[and gate US, draw, logic gate inputs=nn] (and2) at (8,1.2) {};
+    \node[or gate US,  draw, logic gate inputs=nn] (or1)  at (12,0.9) {};
+    % Etiquetas de compuertas
+    \node[above=1pt] at (xor1.north) {\scriptsize XOR$_1$ (7486)};
+    \node[above=1pt] at (xor2.north) {\scriptsize XOR$_2$ (7486)};
+    \node[below=1pt] at (and1.south) {\scriptsize AND$_1$ (7408)};
+    \node[below=1pt] at (and2.south) {\scriptsize AND$_2$ (7408)};
+    \node[above=1pt] at (or1.north)  {\scriptsize OR (7432)};
+    % Entradas
+    \draw (0,5.4) node[left] {$A$} -- (1.0,5.4);
+    \draw (0,3.0) node[left] {$B$} -- (1.6,3.0);
+    \draw (0,-1.4) node[left] {$C_{in}$} -- (6.0,-1.4);
+    % Distribución de A
+    \draw (1.0,5.4) |- (xor1.input 1);
+    \draw (1.0,5.4) |- (and1.input 1);
+    \fill (1.0,5.4) circle (1.5pt);
+    % Distribución de B
+    \draw (1.6,3.0) |- (xor1.input 2);
+    \draw (1.6,3.0) |- (and1.input 2);
+    \fill (1.6,3.0) circle (1.5pt);
+    % Señal X
+    \draw (xor1.output) -- (5.0,4.0);
+    \draw (5.0,4.0) |- (xor2.input 1);
+    \draw (5.0,4.0) |- (and2.input 1);
+    \fill (5.0,4.0) circle (1.5pt);
+    \node[above] at (5.0,4.0) {$X$};
+    % Distribución de Cin
+    \draw (6.0,-1.4) -- (6.0,1.0) |- (and2.input 2);
+    \draw (6.0,-1.4) |- (xor2.input 2);
+    \fill (6.0,-1.4) circle (1.5pt);
+    % Etapa final
+    \draw (and2.output) -- ++(0.7,0) |- (or1.input 1);
+    \draw (and1.output) -- ++(0.7,0) -| (10.3,0.9) |- (or1.input 2);
+    % Salidas
+    \draw (xor2.output) -- ++(1.4,0) node[right] {$S$};
+    \draw (or1.output)  -- ++(1.2,0) node[right] {$C_{out}$};
+  \end{tikzpicture}
+  \caption{Circuito lógico del sumador total de un bit: 2 compuertas XOR,
+  2 compuertas AND y 1 compuerta OR.}
+  \label{fig:logico}
+\end{figure}
+
+% ------------------------------------------------------------
+\subsection{Implementación en el simulador}
+
+\subsubsection{Asignación de compuertas y pines}
+
+Cada circuito integrado TTL tiene cuatro compuertas de dos entradas con la misma
+distribución de pines: entradas en los pines 1, 2, 4, 5, 9, 10, 12 y 13, y
+salidas en los pines 3, 6, 8 y 11. Solo se usan las dos primeras compuertas de
+los chips XOR y AND, y la primera del chip OR (Tabla~\ref{tab:pines}).
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Asignación de compuertas a los pines de los circuitos integrados.}
+  \label{tab:pines}
+  \begin{tabular}{llcccc}
+    \toprule
+    Función & Chip & Compuerta & Entrada 1 & Entrada 2 & Salida \\
+    \midrule
+    XOR$_1$: $X = A \oplus B$          & 7486 & 1 & pin 1 & pin 2 & pin 3 \\
+    XOR$_2$: $S = X \oplus C_{in}$     & 7486 & 2 & pin 4 & pin 5 & pin 6 \\
+    AND$_1$: $A \cdot B$               & 7408 & 1 & pin 1 & pin 2 & pin 3 \\
+    AND$_2$: $C_{in} \cdot X$          & 7408 & 2 & pin 4 & pin 5 & pin 6 \\
+    OR: $C_{out}$                      & 7432 & 1 & pin 1 & pin 2 & pin 3 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Consideraciones previas}
+
+\begin{itemize}
+  \item El módulo digital debe estar \textbf{apagado} (interruptor ON de la
+        esquina superior izquierda) para insertar chips y dibujar cables.
+  \item Los chips solo pueden insertarse \textbf{entre las filas E y F} de la
+        protoboard, cruzando la franja gris central, y en casillas libres de
+        cables.
+  \item Los números de la protoboard (5, 10, 15, \ldots) son \textbf{números de
+        columna}, no de pin. El pin 1 de cada chip está junto a la muesca
+        circular, en la esquina inferior izquierda.
+  \item Los pines 1 a 7 quedan en la \textbf{fila F} (parte inferior) y los
+        pines 14 a 8 en la \textbf{fila E} (parte superior): el pin 14 está
+        sobre el pin 1, y el pin 8 sobre el pin 7.
+  \item Las casillas de una misma columna y mitad (filas A--E o F--J) están
+        unidas entre sí. Por eso los cables de los pines 1 a 7 se conectan en
+        las filas G a J, y los de los pines 8 a 14 en las filas A a D.
+  \item Cada casilla admite un solo extremo de cable. Cuando una señal va a
+        dos destinos se usan dos casillas distintas de la misma columna (por
+        ejemplo, G8 y H8).
+  \item El riel superior (línea roja) se usa como VCC y el riel inferior
+        (línea azul) como GND, según el circuito de ejemplo
+        \texttt{Test7486\_Directo} del simulador.
+  \item \textbf{No se deben mover} los chips una vez insertados: el simulador
+        presenta un error conocido que impide conectar cables después. En ese
+        caso se guarda el circuito, se abre uno nuevo y se vuelve a abrir el
+        archivo guardado.
+  \item Las compuertas que no se utilizan se dejan sin conectar.
+  \item Un cable se dibuja presionando sobre una casilla libre, arrastrando y
+        soltando sobre otra casilla libre. Se borra con clic derecho sobre una
+        casilla que contenga uno de sus extremos.
+  \item Se adoptó un código de colores para facilitar la revisión: rojo para
+        VCC, negro para GND, azul para las entradas, verde para señales
+        internas y naranja para las salidas (menú \textit{Cable}).
+\end{itemize}
+
+\subsubsection{Procedimiento paso a paso}
+
+\begin{itemize}
+  \item[\textbf{Paso 1.}] \textbf{Preparar el simulador.} Abrir el simulador,
+        seleccionar \textit{Archivo $\rightarrow$ Nuevo} y verificar que el
+        módulo esté apagado.
+
+  \item[\textbf{Paso 2.}] \textbf{Insertar los chips.} En el menú
+        \textit{Circuitos $\rightarrow$ Puertas básicas} elegir el
+        \textit{Xor 7486}, el \textit{And 7408} y el \textit{Or 7432}, y
+        arrastrar cada uno hasta que cruce la franja central. Se ubicaron con
+        el pin 1 en las columnas 8, 17 y 27, respectivamente
+        (Figura~\ref{fig:chips}).
+
+  \item[\textbf{Paso 3.}] \textbf{Alimentar los rieles.} Conectar el conector
+        VCC del módulo al riel superior y el conector GND al riel inferior.
+
+  \item[\textbf{Paso 4.}] \textbf{Alimentar los chips.} Conectar el pin 14 de
+        cada chip al riel superior y el pin 7 al riel inferior
+        (cables 3 a 8 de la Tabla~\ref{tab:cables}).
+
+  \item[\textbf{Paso 5.}] \textbf{Conectar las entradas.} Unir los
+        interruptores 1, 2 y 3 del panel de ocho interruptores con las
+        casillas de los pines de entrada del 7486, correspondientes a $A$, $B$
+        y $C_{in}$ (cables 9 a 11).
+
+  \item[\textbf{Paso 6.}] \textbf{Distribuir las señales.} Copiar $A$, $B$ y
+        $C_{in}$ a las entradas del 7408 (cables 12 a 14) y llevar $X$ a la
+        segunda entrada del XOR$_2$ y a la del AND$_2$ (cables 15 y 16).
+
+  \item[\textbf{Paso 7.}] \textbf{Formar el acarreo.} Conectar las salidas de las
+        dos compuertas AND a las dos entradas de la compuerta OR
+        (cables 17 y 18).
+
+  \item[\textbf{Paso 8.}] \textbf{Conectar las salidas.} Llevar el pin 6 del
+        7486 ($S$) al LED amarillo 1 y el pin 3 del 7432 ($C_{out}$) al LED
+        amarillo 2 (cables 19 y 20).
+
+  \item[\textbf{Paso 9.}] \textbf{Revisar el cableado.} Comparar cada cable con
+        la Tabla~\ref{tab:cables} antes de energizar el circuito.
+
+  \item[\textbf{Paso 10.}] \textbf{Energizar y guardar.} Encender el módulo,
+        realizar las pruebas de la sección siguiente y guardar el circuito con
+        \textit{Archivo $\rightarrow$ Guardar como}.
+\end{itemize}
+
+\begin{figure}[!htbp]
+  \centering
+  \marcocaptura{5.5cm}{Captura: chips 7486, 7408 y 7432 insertados en la protoboard (Paso 2)}
+  \caption{Inserción de los circuitos integrados sobre la franja central de la
+  protoboard.}
+  \label{fig:chips}
+\end{figure}
+
+\subsubsection{Tabla de conexiones}
+
+Las coordenadas se expresan como letra de fila y número de columna (por
+ejemplo, G8 es la fila G, columna 8). Si los chips se colocan en otras
+columnas, se conserva la misma posición relativa respecto al pin 1 de cada
+chip.
+
+{\small
+\begin{longtable}{clllc}
+  \caption{Lista completa de cables del sumador total.}
+  \label{tab:cables} \\
+  \toprule
+  N.\textsuperscript{o} & Señal & Origen & Destino & Color \\
+  \midrule
+  \endfirsthead
+  \toprule
+  N.\textsuperscript{o} & Señal & Origen & Destino & Color \\
+  \midrule
+  \endhead
+  \midrule
+  \multicolumn{5}{r}{\textit{Continúa en la página siguiente}} \\
+  \endfoot
+  \bottomrule
+  \endlastfoot
+  \multicolumn{5}{l}{\textit{Alimentación}} \\
+  1  & VCC          & Conector VCC del módulo & Riel superior          & Rojo \\
+  2  & GND          & Conector GND del módulo & Riel inferior          & Negro \\
+  3  & VCC del 7486 & A8 (pin 14)  & Riel superior & Rojo \\
+  4  & VCC del 7408 & A17 (pin 14) & Riel superior & Rojo \\
+  5  & VCC del 7432 & A27 (pin 14) & Riel superior & Rojo \\
+  6  & GND del 7486 & J14 (pin 7)  & Riel inferior & Negro \\
+  7  & GND del 7408 & J23 (pin 7)  & Riel inferior & Negro \\
+  8  & GND del 7432 & J33 (pin 7)  & Riel inferior & Negro \\
+  \midrule
+  \multicolumn{5}{l}{\textit{Entradas}} \\
+  9  & $A$ al XOR$_1$      & Interruptor 1 & G8 (7486, pin 1)  & Azul \\
+  10 & $B$ al XOR$_1$      & Interruptor 2 & G9 (7486, pin 2)  & Azul \\
+  11 & $C_{in}$ al XOR$_2$ & Interruptor 3 & G12 (7486, pin 5) & Azul \\
+  12 & $A$ al AND$_1$      & H8  & G17 (7408, pin 1) & Azul \\
+  13 & $B$ al AND$_1$      & H9  & G18 (7408, pin 2) & Azul \\
+  14 & $C_{in}$ al AND$_2$ & H12 & G21 (7408, pin 5) & Azul \\
+  \midrule
+  \multicolumn{5}{l}{\textit{Señales internas}} \\
+  15 & $X$ al XOR$_2$      & G10 (7486, pin 3) & G11 (7486, pin 4) & Verde \\
+  16 & $X$ al AND$_2$      & H10 & G20 (7408, pin 4) & Verde \\
+  17 & $A \cdot B$ al OR   & G19 (7408, pin 3) & G27 (7432, pin 1) & Verde \\
+  18 & $C_{in}\cdot X$ al OR & G22 (7408, pin 6) & G28 (7432, pin 2) & Verde \\
+  \midrule
+  \multicolumn{5}{l}{\textit{Salidas}} \\
+  19 & $S$          & G13 (7486, pin 6) & LED amarillo 1 & Naranja \\
+  20 & $C_{out}$    & G29 (7432, pin 3) & LED amarillo 2 & Naranja \\
+\end{longtable}
+}
+
+\begin{figure}[!htbp]
+  \centering
+  \marcocaptura{8cm}{Captura: circuito completo con todos los cables visibles y el módulo apagado}
+  \caption{Circuito del sumador total completo en el simulador.}
+  \label{fig:circuito}
+\end{figure}
+
+% ------------------------------------------------------------
+\subsection{Pruebas y resultados}
+
+\subsubsection{Procedimiento de prueba}
+
+\begin{itemize}
+  \item Encender el módulo con el interruptor ON.
+  \item Colocar los interruptores 1, 2 y 3 en cada una de las ocho
+        combinaciones de $A$, $B$ y $C_{in}$.
+  \item Anotar el estado del LED 1 ($S$) y del LED 2 ($C_{out}$), donde
+        encendido equivale a 1 y apagado a 0.
+  \item Tomar una captura de pantalla por combinación y comparar con la tabla de
+        verdad teórica.
+\end{itemize}
+
+\subsubsection{Comparación entre resultados teóricos y observados}
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Resultados teóricos y observados en el simulador.}
+  \label{tab:comparacion}
+  \begin{tabular}{ccc|cc|cc|c}
+    \toprule
+    & & & \multicolumn{2}{c|}{Teórico} & \multicolumn{2}{c|}{Observado} & \\
+    $A$ & $B$ & $C_{in}$ & $S$ & $C_{out}$ & $S$ & $C_{out}$ & ¿Coincide? \\
+    \midrule
+    0 & 0 & 0 & 0 & 0 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
+    0 & 0 & 1 & 1 & 0 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
+    0 & 1 & 0 & 1 & 0 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
+    0 & 1 & 1 & 0 & 1 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
+    1 & 0 & 0 & 1 & 0 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
+    1 & 0 & 1 & 0 & 1 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
+    1 & 1 & 0 & 0 & 1 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
+    1 & 1 & 1 & 1 & 1 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Señales internas del circuito}
+
+La Tabla~\ref{tab:internas} muestra el valor de cada señal intermedia. Permite
+seguir el recorrido de los datos por el circuito y ubicar en qué compuerta se
+origina cada resultado.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Valores de las señales internas para las ocho combinaciones.}
+  \label{tab:internas}
+  \begin{tabular}{ccc|ccc|cc}
+    \toprule
+    $A$ & $B$ & $C_{in}$ & $X=A\oplus B$ & $A\cdot B$ & $C_{in}\cdot X$ & $S$ & $C_{out}$ \\
+    \midrule
+    0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+    0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\
+    0 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\
+    0 & 1 & 1 & 1 & 0 & 1 & 0 & 1 \\
+    1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\
+    1 & 0 & 1 & 1 & 0 & 1 & 0 & 1 \\
+    1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\
+    1 & 1 & 1 & 0 & 1 & 0 & 1 & 1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+En esta tabla $A\cdot B$ actúa como señal de \textbf{generación} de acarreo
+(la etapa produce acarreo por sí sola) y $X = A\oplus B$ actúa como señal de
+\textbf{propagación} (la etapa deja pasar el acarreo de entrada). Así,
+$C_{out} = A\cdot B + C_{in}\cdot X$ significa: hay acarreo de salida si la
+etapa lo genera, o si lo propaga y además llegó un acarreo de entrada.
+
+\subsubsection{Capturas de las combinaciones}
+
+Las Figuras~\ref{fig:casosA} y~\ref{fig:casosB} reservan el espacio para la
+captura de cada una de las ocho combinaciones. En cada captura deben verse la
+posición de los tres interruptores y el estado de los dos LED.
+
+\begin{figure}[!htbp]
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \marcocaptura{4cm}{Captura: $A=0$, $B=0$, $C_{in}=0$}\\[2pt]
+    {\small (a) Combinación 000}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \marcocaptura{4cm}{Captura: $A=0$, $B=0$, $C_{in}=1$}\\[2pt]
+    {\small (b) Combinación 001}
+  \end{minipage}\\[8pt]
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \marcocaptura{4cm}{Captura: $A=0$, $B=1$, $C_{in}=0$}\\[2pt]
+    {\small (c) Combinación 010}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \marcocaptura{4cm}{Captura: $A=0$, $B=1$, $C_{in}=1$}\\[2pt]
+    {\small (d) Combinación 011}
+  \end{minipage}
+  \caption{Funcionamiento del sumador total para $A=0$.}
+  \label{fig:casosA}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \marcocaptura{4cm}{Captura: $A=1$, $B=0$, $C_{in}=0$}\\[2pt]
+    {\small (a) Combinación 100}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \marcocaptura{4cm}{Captura: $A=1$, $B=0$, $C_{in}=1$}\\[2pt]
+    {\small (b) Combinación 101}
+  \end{minipage}\\[8pt]
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \marcocaptura{4cm}{Captura: $A=1$, $B=1$, $C_{in}=0$}\\[2pt]
+    {\small (c) Combinación 110}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \marcocaptura{4cm}{Captura: $A=1$, $B=1$, $C_{in}=1$}\\[2pt]
+    {\small (d) Combinación 111}
+  \end{minipage}
+  \caption{Funcionamiento del sumador total para $A=1$.}
+  \label{fig:casosB}
+\end{figure}
+
+\subsubsection{Explicación de casos representativos}
+
+\begin{itemize}
+  \item \textbf{Caso $000$ ($0+0+0=0$).} Ninguna entrada está activa. Las dos
+        compuertas XOR y las dos AND dan 0, por lo que $S=0$ y $C_{out}=0$. Los
+        dos LED permanecen apagados.
+
+  \item \textbf{Caso $001$ ($0+0+1=1$).} Solo hay acarreo de entrada. Como
+        $X = 0\oplus 0 = 0$, la segunda XOR calcula $S = 0\oplus 1 = 1$. Ambas
+        AND dan 0, por lo que no hay acarreo: $S=1$ y $C_{out}=0$.
+
+  \item \textbf{Caso $011$ ($0+1+1=2=10_2$).} Se tiene $X = 0\oplus 1 = 1$, de
+        modo que $S = 1\oplus 1 = 0$. La compuerta AND$_2$ calcula
+        $C_{in}\cdot X = 1\cdot 1 = 1$, y la OR entrega $C_{out}=1$. Aquí el
+        acarreo se \textit{propaga} desde la entrada.
+
+  \item \textbf{Caso $110$ ($1+1+0=2=10_2$).} Se tiene $X = 1\oplus 1 = 0$, por
+        lo que $S = 0\oplus 0 = 0$. La compuerta AND$_1$ calcula
+        $A\cdot B = 1$, y la OR entrega $C_{out}=1$. Aquí el acarreo se
+        \textit{genera} en la propia etapa.
+
+  \item \textbf{Caso $111$ ($1+1+1=3=11_2$).} Es el valor máximo. Se tiene
+        $X = 1\oplus 1 = 0$, luego $S = 0\oplus 1 = 1$. Además $A\cdot B = 1$ y
+        $C_{in}\cdot X = 0$, de modo que $C_{out} = 1 + 0 = 1$. El resultado
+        $C_{out}S = 11_2$ equivale a $3$ en decimal, como exige la suma.
+\end{itemize}
+
+% ------------------------------------------------------------
+\subsection{Análisis y solución de problemas}
+
+La Tabla~\ref{tab:problemas} reúne los fallos más probables durante el armado y
+la manera de corregirlos.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Problemas frecuentes y su solución.}
+  \label{tab:problemas}
+  \begin{tabular}{p{4.3cm}p{4.8cm}p{5cm}}
+    \toprule
+    Síntoma & Causa probable & Solución \\
+    \midrule
+    Ningún LED enciende con ninguna combinación &
+    Módulo apagado o chips sin alimentación &
+    Encender el módulo y revisar los cables de los pines 14 y 7 de los tres chips. \\
+    $S$ correcto pero $C_{out}$ incorrecto &
+    Falta o está mal conectado un cable de la etapa AND/OR &
+    Revisar los cables 16 a 18 de la Tabla~\ref{tab:cables}. \\
+    $C_{out}$ solo vale 1 cuando $A=B=1$ &
+    No llega la señal $C_{in}\cdot X$ a la OR &
+    Revisar los cables 14, 16 y 18. \\
+    $S$ no cambia con $C_{in}$ &
+    El interruptor 3 no llega al pin 5 del 7486 &
+    Revisar el cable 11 y que esté en la columna correcta. \\
+    El chip vuelve a su sitio al soltarlo &
+    No está centrado sobre la franja o hay casillas ocupadas &
+    Alinear las patitas con las filas E y F y liberar las casillas. \\
+    No se pueden conectar cables tras mover un chip &
+    Error conocido del simulador &
+    Guardar, usar \textit{Archivo $\rightarrow$ Nuevo} y abrir el archivo guardado. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% ------------------------------------------------------------
+\subsection{Extensión opcional: sumador de cuatro bits}
+
+El sumador total de un bit es el bloque básico de un sumador de $n$ bits.
+Conectando el $C_{out}$ de cada etapa al $C_{in}$ de la siguiente se obtiene un
+sumador de acarreo en cascada (\textit{ripple carry}). Con cuatro etapas se
+suman dos números de cuatro bits. El simulador también incluye los circuitos
+integrados 7483A y 74283, que contienen un sumador de cuatro bits completo y
+sirven para contrastar los resultados del diseño propio.
+
+% ------------------------------------------------------------
 \section{Conclusiones}
+
+\begin{itemize}
+  \item Se diseñó un sumador total de un bit a partir de su tabla de verdad,
+        obteniendo $S = A\oplus B\oplus C_{in}$ y
+        $C_{out} = A\,B + C_{in}(A\oplus B)$.
+  \item La simplificación por mapa de Karnaugh y por álgebra booleana condujo a
+        expresiones equivalentes; la forma con XOR compartido redujo el circuito
+        de siete a cinco compuertas.
+  \item El circuito se implementó con tres circuitos integrados TTL (7486, 7408
+        y 7432) y se comprobó en el simulador que las ocho combinaciones
+        coinciden con la tabla de verdad teórica.
+  \item Los casos $011$, $110$ y $111$ permitieron distinguir la generación y
+        la propagación del acarreo, y verificar que el resultado $C_{out}S$
+        coincide con la suma aritmética.
+  \item Las prácticas de conexión (numeración de pines, alimentación, uso de
+        varias casillas por columna y no mover los chips insertados) resultaron
+        determinantes para que el circuito funcionara correctamente.
+\end{itemize}
+
 
 \end{document}
