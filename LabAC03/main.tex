@@ -1,0 +1,155 @@
+\documentclass[10pt]{article}
+
+% ---------- IDIOMA Y CODIFICACIÓN ----------
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{circuits.logic.US}
+
+% ---------- TABLAS (Actividad 1: identificación de dispositivos) ----------
+\usepackage{booktabs}   % líneas de tabla profesionales (\toprule, \midrule, \bottomrule)
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage[table]{xcolor} % opcional, para color en encabezado
+\usepackage{tabularx}   % columnas que se ajustan al ancho de página
+\usepackage{longtable}  % tablas que pueden partirse entre páginas (útil si tu tabla de dispositivos es larga)
+\usepackage{caption}    % control de estilo de "Tabla X: ..."
+
+% ---------- GLOSARIO (Actividad 2) ----------
+% Enfoque simple con "description", sin necesidad de correr makeglossaries aparte
+% (evita agregar un paso extra a tu pipeline de compilación).
+\usepackage{enumitem}
+\newlist{glosario}{description}{1}
+\setlist[glosario]{
+    font=\normalfont\bfseries,
+    leftmargin=0pt,
+    labelsep=0.5em,
+    itemsep=0.5em
+}
+% Uso dentro del documento:
+%   \begin{glosario}
+%       \item[Chipset] Definición y características...
+%   \end{glosario}
+
+% ---------- PLACEHOLDER \relleno ----------
+% Uso: \relleno              -> texto de aviso genérico
+%      \relleno{Tu texto}    -> muestra tu texto en rojo (útil para ir dejando borradores)
+\newcommand{\relleno}[1][\textbf{[COMPLETAR AQUÍ]}]{\textcolor{red}{#1}}
+% ---------- CONFIGURACIONES PARA ENCABEZADO Y PORTADA ----------
+\usepackage{colortbl}
+\usepackage{float}
+
+% Definición de colores y columnas personalizadas (usadas en la portada)
+\definecolor{tablebackground}{rgb}{0.8, 0, 0}
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{N}{@{}m{0pt}@{}}
+\newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+
+% Variables de datos para la portada y encabezado
+\newcommand{\itemEmail}{ccapatinta@unsa.edu.pe}
+\newcommand{\itemStudent}{Camilo B.A. Capatinta Almanza (Teoría grupo B)}
+\newcommand{\itemCourse}{Lab. Arq. de computadoras}
+\newcommand{\itemCourseCode}{1702227}
+\newcommand{\itemSemester}{IV}
+\newcommand{\itemUniversity}{Universidad Nacional de San Agustín de Arequipa}
+\newcommand{\itemFaculty}{Facultad de Ingeniería de Producción y Servicios}
+\newcommand{\itemDepartment}{Departamento Académico de Ingeniería de Sistemas e Informática}
+\newcommand{\itemSchool}{Escuela Profesional de Ingeniería de Sistemas}
+\newcommand{\itemAcademic}{2026 - B}
+\newcommand{\itemInput}{29/09/2026}
+\newcommand{\itemOutput}{--/09/2026}
+\newcommand{\itemPracticeNumber}{03}
+\newcommand{\itemTheme}{Programación para el microprocesador INTEL - Instrucciones de transferencia de datos}
+
+% Configuración del encabezado y pie de página (fancyhdr)
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{40.51407pt}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+% Encabezado
+\fancyhead[L]{\raisebox{-0.2\height}{\includegraphics[width=3cm]{img/logo_episunsa.png}}}
+\fancyhead[C]{\fontsize{7}{7}\selectfont    \itemUniversity \\ \itemFaculty \\ \itemDepartment \\ \itemSchool \\ \textbf{\itemCourse}}
+\fancyhead[R]{\raisebox{-0.2\height}{\includegraphics[width=1.2cm]{img/logo_abet.png}}}
+
+% Pie de página
+\fancyfoot[L]{Estudiante Camilo Capatinta}
+\fancyfoot[C]{\itemCourse}
+\fancyfoot[R]{Página \thepage}
+
+\begin{document}
+
+% --- INICIO DE LA PORTADA ---
+	\vspace*{10px}
+	
+	\begin{center}
+		\parbox{0.8\textwidth}{\centering\fontsize{17}{20}\selectfont\textbf{Informe de laboratorio \itemPracticeNumber}}
+	\end{center}
+	\begin{center}
+		\parbox{0.8\textwidth}{\centering\textbf{\Large Tema: \itemTheme}}
+	\end{center}
+
+\begin{flushright}
+    \begin{tabular}{|M{2.5cm}|N|}
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white} \textbf{Nota}  \\
+        \hline 
+             \\[30pt]
+        \hline          
+    \end{tabular}
+\end{flushright}    
+
+\begin{table}[h!]
+    \begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}        
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white} \textbf{Estudiante} & \color{white}\textbf{Escuela}  & \color{white}\textbf{Asignatura}   \\
+        \hline 
+        {\itemStudent \par \itemEmail} & \itemSchool & {\itemCourse \par Semestre: \itemSemester \par Código: \itemCourseCode}     \\
+        \hline          
+    \end{tabular}
+\end{table}     
+
+\begin{table}[H]
+    \begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white}\textbf{Laboratorio} & \color{white}\textbf{Tema}  & \color{white}\textbf{Duración}   \\
+        \hline 
+        \itemPracticeNumber & \itemTheme & 02 horas   \\
+        \hline 
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white}\textbf{Semestre académico} & \color{white}\textbf{Fecha de inicio}  & \color{white}\textbf{Fecha de entrega}   \\
+        \hline 
+        \itemAcademic & \itemInput &  \itemOutput  \\
+        \hline 
+    \end{tabular}
+\end{table}
+
+\newpage
+% --- FIN DE LA PORTADA ---
+
+% ============================================================
+% Sección: Actividades
+% Diseño e implementación de un sumador total de un bit
+% Simulador de Circuitos Digitales 0.9.5 (tourdigital.net)
+% ============================================================
+\section{Actividades}
+\section{Cuestionario}
+\section{Conclusiones}
+
+\end{document}
