@@ -570,7 +570,7 @@ los chips XOR y AND, y la primera del chip OR (Tabla~\ref{tab:pines}).
 
 \begin{figure}[!htbp]
   \centering
-  \marcocaptura{5.5cm}{Captura: chips 7486, 7408 y 7432 insertados en la protoboard (Paso 2)}
+  \includegraphics[width=0.98\linewidth,height=6.5cm,keepaspectratio]{img/3chips.png}
   \caption{Inserción de los circuitos integrados sobre la franja central de la
   protoboard.}
   \label{fig:chips}
@@ -632,7 +632,7 @@ chip.
 
 \begin{figure}[!htbp]
   \centering
-  \marcocaptura{8cm}{Captura: circuito completo con todos los cables visibles y el módulo apagado}
+  \includegraphics[width=0.98\linewidth,height=6.5cm,keepaspectratio]{img/circuitoCompleto.png}
   \caption{Circuito del sumador total completo en el simulador.}
   \label{fig:circuito}
 \end{figure}
@@ -663,14 +663,14 @@ chip.
     & & & \multicolumn{2}{c|}{Teórico} & \multicolumn{2}{c|}{Observado} & \\
     $A$ & $B$ & $C_{in}$ & $S$ & $C_{out}$ & $S$ & $C_{out}$ & ¿Coincide? \\
     \midrule
-    0 & 0 & 0 & 0 & 0 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
-    0 & 0 & 1 & 1 & 0 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
-    0 & 1 & 0 & 1 & 0 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
-    0 & 1 & 1 & 0 & 1 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
-    1 & 0 & 0 & 1 & 0 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
-    1 & 0 & 1 & 0 & 1 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
-    1 & 1 & 0 & 0 & 1 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
-    1 & 1 & 1 & 1 & 1 & \underline{\hspace{0.6cm}} & \underline{\hspace{0.6cm}} & \underline{\hspace{0.8cm}} \\
+    0 & 0 & 0 & 0 & 0 & 0 & 0 & Sí \\
+    0 & 0 & 1 & 1 & 0 & 1 & 0 & Sí \\
+    0 & 1 & 0 & 1 & 0 & 1 & 0 & Sí \\
+    0 & 1 & 1 & 0 & 1 & 0 & 1 & Sí \\
+    1 & 0 & 0 & 1 & 0 & 1 & 0 & Sí \\
+    1 & 0 & 1 & 0 & 1 & 0 & 1 & Sí \\
+    1 & 1 & 0 & 0 & 1 & 0 & 1 & Sí \\
+    1 & 1 & 1 & 1 & 1 & 1 & 1 & Sí \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -717,22 +717,22 @@ posición de los tres interruptores y el estado de los dos LED.
   \centering
   \begin{minipage}{0.48\textwidth}
     \centering
-    \marcocaptura{4cm}{Captura: $A=0$, $B=0$, $C_{in}=0$}\\[2pt]
+    \includegraphics[width=\linewidth,height=4cm,keepaspectratio]{img/1.png}\\[2pt]
     {\small (a) Combinación 000}
   \end{minipage}\hfill
   \begin{minipage}{0.48\textwidth}
     \centering
-    \marcocaptura{4cm}{Captura: $A=0$, $B=0$, $C_{in}=1$}\\[2pt]
+    \includegraphics[width=\linewidth,height=4cm,keepaspectratio]{img/2.png}\\[2pt]
     {\small (b) Combinación 001}
   \end{minipage}\\[8pt]
   \begin{minipage}{0.48\textwidth}
     \centering
-    \marcocaptura{4cm}{Captura: $A=0$, $B=1$, $C_{in}=0$}\\[2pt]
+    \includegraphics[width=\linewidth,height=4cm,keepaspectratio]{img/3.png}\\[2pt]
     {\small (c) Combinación 010}
   \end{minipage}\hfill
   \begin{minipage}{0.48\textwidth}
     \centering
-    \marcocaptura{4cm}{Captura: $A=0$, $B=1$, $C_{in}=1$}\\[2pt]
+    \includegraphics[width=\linewidth,height=4cm,keepaspectratio]{img/4.png}\\[2pt]
     {\small (d) Combinación 011}
   \end{minipage}
   \caption{Funcionamiento del sumador total para $A=0$.}
@@ -743,22 +743,22 @@ posición de los tres interruptores y el estado de los dos LED.
   \centering
   \begin{minipage}{0.48\textwidth}
     \centering
-    \marcocaptura{4cm}{Captura: $A=1$, $B=0$, $C_{in}=0$}\\[2pt]
+    \includegraphics[width=\linewidth,height=4cm,keepaspectratio]{img/5.png}\\[2pt]
     {\small (a) Combinación 100}
   \end{minipage}\hfill
   \begin{minipage}{0.48\textwidth}
     \centering
-    \marcocaptura{4cm}{Captura: $A=1$, $B=0$, $C_{in}=1$}\\[2pt]
+    \includegraphics[width=\linewidth,height=4cm,keepaspectratio]{img/6.png}\\[2pt]
     {\small (b) Combinación 101}
   \end{minipage}\\[8pt]
   \begin{minipage}{0.48\textwidth}
     \centering
-    \marcocaptura{4cm}{Captura: $A=1$, $B=1$, $C_{in}=0$}\\[2pt]
+    \includegraphics[width=\linewidth,height=4cm,keepaspectratio]{img/7.png}\\[2pt]
     {\small (c) Combinación 110}
   \end{minipage}\hfill
   \begin{minipage}{0.48\textwidth}
     \centering
-    \marcocaptura{4cm}{Captura: $A=1$, $B=1$, $C_{in}=1$}\\[2pt]
+    \includegraphics[width=\linewidth,height=4cm,keepaspectratio]{img/8.png}\\[2pt]
     {\small (d) Combinación 111}
   \end{minipage}
   \caption{Funcionamiento del sumador total para $A=1$.}
