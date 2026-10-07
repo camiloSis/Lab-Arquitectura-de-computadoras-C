@@ -18,6 +18,8 @@
 \usepackage{tabularx}   % columnas que se ajustan al ancho de página
 \usepackage{longtable}  % tablas que pueden partirse entre páginas (útil si tu tabla de dispositivos es larga)
 \usepackage{caption}    % control de estilo de "Tabla X: ..."
+\usepackage{float}
+\usepackage{makecell}
 
 % ---------- GLOSARIO (Actividad 2) ----------
 % Enfoque simple con "description", sin necesidad de correr makeglossaries aparte
@@ -30,6 +32,8 @@
     labelsep=0.5em,
     itemsep=0.5em
 }
+
+% ------- TABLAS PARA EMULADOR 8086 ---
 % Uso dentro del documento:
 %   \begin{glosario}
 %       \item[Chipset] Definición y características...
@@ -41,7 +45,6 @@
 \newcommand{\relleno}[1][\textbf{[COMPLETAR AQUÍ]}]{\textcolor{red}{#1}}
 % ---------- CONFIGURACIONES PARA ENCABEZADO Y PORTADA ----------
 \usepackage{colortbl}
-\usepackage{float}
 
 % Definición de colores y columnas personalizadas (usadas en la portada)
 \definecolor{tablebackground}{rgb}{0.8, 0, 0}
@@ -62,7 +65,7 @@
 \newcommand{\itemSchool}{Escuela Profesional de Ingeniería de Sistemas}
 \newcommand{\itemAcademic}{2026 - B}
 \newcommand{\itemInput}{29/09/2026}
-\newcommand{\itemOutput}{--/09/2026}
+\newcommand{\itemOutput}{--/10/2026}
 \newcommand{\itemPracticeNumber}{03}
 \newcommand{\itemTheme}{Programación para el microprocesador INTEL - Instrucciones de transferencia de datos}
 
@@ -149,6 +152,124 @@
 % Simulador de Circuitos Digitales 0.9.5 (tourdigital.net)
 % ============================================================
 \section{Actividades}
+\subsection{Programa 1: Instrucciones de transferencia de datos}
+
+Ahora analice el siguiente código fuente (llamado PRIMER PROGRAMA),
+ayudándose de los comentarios y del diagrama de flujo que lo acompaña. Intente
+predecir cada cambio que tendrán los datos hexadecimales en los registros del
+microprocesador.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/1.png}
+    \caption{programa1.asm}
+    \label{fig:programa1.asm}
+\end{figure}
+
+\begin{itemize}
+    \item Observe que el sistema le asigna al archivo .COM el mismo nombre que el archivo .asm, es decir, programa1.com
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/2.png}
+    \caption{Emulador de programa1.asm}
+    \label{fig:emulador_programa1_antes}
+\end{figure}
+
+\begin{itemize}
+    \item Copie los datos almacenados en los registros antes de ejecutar el programa:
+\end{itemize}
+% Tabla 12
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+AX: & BX: & CX: & DX: \\ \hline
+CS: & DS: & ES: & SS: \\ \hline
+BP: & IP: & SP & \cellcolor{gray!40} \\ \hline
+DI: & SI: & \cellcolor{gray!40} & \cellcolor{gray!40} \\ \hline
+\end{tabular}
+\caption{Datos almacenados antes de ejecutar el programa.}
+\end{table}
+
+\begin{itemize}
+    \item Ejecute el programa totalmente (RUN) y anote los datos resultantes. Verifique
+si concuerdan con los datos que usted esperaba.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/3.png}
+    \caption{Emulador de programa1.asm}
+    \label{fig:emulador_programa1_resultante}
+\end{figure}
+% Tabla 13
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+AX: & BX: & CX: & DX: \\ \hline
+CS: & DS: & ES: & SS: \\ \hline
+BP: & IP: & SP & \cellcolor{gray!40} \\ \hline
+DI: & SI: & \cellcolor{gray!40} & \cellcolor{gray!40} \\ \hline
+\end{tabular}
+\caption{Datos resultantes después de ejecutar el programa.}
+\end{table}
+
+\begin{itemize}
+    \item Ejecute el emulador con Single step y anote los resultados en la Cuadro.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/4.png}
+    \caption{Emulador ejecutado con Single step}
+    \label{fig:emulador_Single_step}
+\end{figure}
+
+% Preámbulo: \usepackage{array,tabularx,makecell}
+
+\begin{table}[H]
+\centering
+\caption{Programa 1: transferencia de datos}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{0.10\textwidth}|>{\centering\arraybackslash}p{0.10\textwidth}|>{\centering\arraybackslash}p{0.07\textwidth}|>{\centering\arraybackslash}p{0.07\textwidth}|>{\centering\arraybackslash}p{0.07\textwidth}|>{\centering\arraybackslash}X|}
+\hline
+\multicolumn{2}{|c|}{\textbf{DIRECCIONES}} &
+\multicolumn{3}{c|}{\makecell{\textbf{LENGUAJE DE}\\\textbf{MÁQUINA}}} &
+\makecell{\textbf{LENGUAJE}\\\textbf{ENSAMBLADOR}} \\ \hline
+
+\textbf{SEGM (CS)} & \textbf{OFFSET} &
+\multicolumn{3}{c|}{\textbf{CAMPOS}} &
+\textbf{LÍNEA} \\ \hline
+
+0700 & 0100 & B4 & 7A &    & mov AH, 7Ah \\ \hline
+0700 & 0102 & B3 & 63 &    & mov BL, 99 \\ \hline
+0700 & 0104 & B1 & CF &    & mov CL, 11001111b \\ \hline
+0700 & 0106 & B8 & 64 & 00 & mov AX, 100 \\ \hline
+0700 & 0109 & BB & 4E & 00 & mov BX, 78 \\ \hline
+0700 & 010C & B9 & CD & AB & mov CX, 0ABCDh \\ \hline
+0700 & 010F & BA & 8C & 19 & mov DX, 6540 \\ \hline
+0700 & 0112 & C3 &    &    & ret \\ \hline
+
+\multicolumn{6}{|c|}{\makecell{\textbf{NOTA: A partir de este punto el programa ejecuta un procedimiento}\\
+\textbf{predeterminado llamado Interrupción.}}} \\ \hline
+
+0700 & 0113 & CD & 20 &    & INT 20h \\ \hline
+F400 & 0150 &    &    &    &  \\ \hline
+\end{tabularx}
+\end{table}
+
+
+
+
+
+
+
+
+
 \section{Cuestionario}
 \section{Conclusiones}
 
