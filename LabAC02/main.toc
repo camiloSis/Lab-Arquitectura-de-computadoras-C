@@ -1,0 +1,33 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Actividades}{3}{}%
+\contentsline {subsection}{\numberline {1.1}Objetivos}{3}{}%
+\contentsline {subsubsection}{\numberline {1.1.1}Objetivo general}{3}{}%
+\contentsline {subsubsection}{\numberline {1.1.2}Objetivos específicos}{3}{}%
+\contentsline {subsection}{\numberline {1.2}Fundamento teórico}{3}{}%
+\contentsline {subsection}{\numberline {1.3}Herramientas y materiales}{3}{}%
+\contentsline {subsection}{\numberline {1.4}Diseño del sumador total de un bit}{3}{}%
+\contentsline {subsubsection}{\numberline {1.4.1}Definición de entradas y salidas}{3}{}%
+\contentsline {subsubsection}{\numberline {1.4.2}Tabla de verdad}{4}{}%
+\contentsline {paragraph}{Explicación de la tabla.}{4}{}%
+\contentsline {subsubsection}{\numberline {1.4.3}Minitérminos y funciones canónicas}{5}{}%
+\contentsline {subsubsection}{\numberline {1.4.4}Simplificación de la función de suma $S$}{5}{}%
+\contentsline {subsubsection}{\numberline {1.4.5}Simplificación del acarreo de salida $C_{out}$}{5}{}%
+\contentsline {paragraph}{Mediante mapa de Karnaugh.}{5}{}%
+\contentsline {paragraph}{Mediante álgebra booleana.}{5}{}%
+\contentsline {paragraph}{Elección de la forma para el circuito.}{5}{}%
+\contentsline {subsubsection}{\numberline {1.4.6}Ecuaciones finales}{6}{}%
+\contentsline {subsubsection}{\numberline {1.4.7}Circuito lógico}{6}{}%
+\contentsline {subsection}{\numberline {1.5}Implementación en el simulador}{6}{}%
+\contentsline {subsubsection}{\numberline {1.5.1}Asignación de compuertas y pines}{6}{}%
+\contentsline {subsubsection}{\numberline {1.5.2}Consideraciones previas}{6}{}%
+\contentsline {subsubsection}{\numberline {1.5.3}Procedimiento paso a paso}{7}{}%
+\contentsline {subsubsection}{\numberline {1.5.4}Tabla de conexiones}{8}{}%
+\contentsline {subsection}{\numberline {1.6}Pruebas y resultados}{9}{}%
+\contentsline {subsubsection}{\numberline {1.6.1}Procedimiento de prueba}{9}{}%
+\contentsline {subsubsection}{\numberline {1.6.2}Comparación entre resultados teóricos y observados}{9}{}%
+\contentsline {subsubsection}{\numberline {1.6.3}Señales internas del circuito}{9}{}%
+\contentsline {subsubsection}{\numberline {1.6.4}Capturas de las combinaciones}{10}{}%
+\contentsline {subsubsection}{\numberline {1.6.5}Explicación de casos representativos}{10}{}%
+\contentsline {subsection}{\numberline {1.7}Análisis y solución de problemas}{10}{}%
+\contentsline {subsection}{\numberline {1.8}Extensión opcional: sumador de cuatro bits}{12}{}%
+\contentsline {section}{\numberline {2}Conclusiones}{12}{}%

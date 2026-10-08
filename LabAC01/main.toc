@@ -1,0 +1,20 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Marco Teórico}{3}{}%
+\contentsline {subsection}{\numberline {1.1}Procesador}{3}{}%
+\contentsline {subsection}{\numberline {1.2}Memorias}{3}{}%
+\contentsline {subsubsection}{\numberline {1.2.1}Memoria Principal}{3}{}%
+\contentsline {paragraph}{ROM (Read Only Memory)}{3}{}%
+\contentsline {paragraph}{RAM (Random Access Memory)}{3}{}%
+\contentsline {paragraph}{Tipos de DRAM}{3}{}%
+\contentsline {paragraph}{SRAM (Static RAM)}{4}{}%
+\contentsline {paragraph}{Tag RAM}{4}{}%
+\contentsline {paragraph}{VRAM}{4}{}%
+\contentsline {paragraph}{Memoria Caché}{4}{}%
+\contentsline {paragraph}{Memoria Secundaria}{5}{}%
+\contentsline {subsection}{\numberline {1.3}Bus}{5}{}%
+\contentsline {subsection}{\numberline {1.4}Entrada/Salida}{5}{}%
+\contentsline {section}{\numberline {2}Actividades}{5}{}%
+\contentsline {subsection}{\numberline {2.1}Clasificación de dispositivos}{6}{}%
+\contentsline {subsection}{\numberline {2.2}Glosario de términos técnicos}{7}{}%
+\contentsline {section}{\numberline {3}Cuestionario}{8}{}%
+\contentsline {section}{\numberline {4}Conclusiones}{10}{}%
