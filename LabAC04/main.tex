@@ -340,11 +340,25 @@ Las banderas que se monitorearon se resumen en la Tabla~\ref{tab:banderas}.
  
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.91\textwidth]{img/5.png}
+    \includegraphics[width=0.85\textwidth]{img/5.png}
     \caption{Código del segundo programa en el editor de EMU8086.}
-    \label{fig:segundoPrograma.asm}
+    \label{fig:bloque1.asm}
 \end{figure}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{img/5(1).png}
+    \caption{Registros y estado de flags en la ejecución del primer bloque.}
+    \label{fig:bloque1.asm}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{img/5(2).png}
+    \caption{Registros y estado de flags en la ejecución del segundo bloque.}
+    \label{fig:bloque2.asm}
+\end{figure}
+ 
 \begin{table}[htbp]
   \centering
   \caption{Ejecución paso a paso del segundo programa original.}
@@ -379,27 +393,32 @@ Las banderas que se monitorearon se resumen en la Tabla~\ref{tab:banderas}.
   {\small (--) La instrucción no modifica esa bandera. \texttt{NOT} tampoco modifica ninguna bandera.}
 \end{table}
  
-\figuraimagen{p2-bloque1.png}{Estado de DL y de las banderas al final del primer bloque.}{fig:p2-bloque1}{emulador al terminar el primer bloque}
- 
-\figuraimagen{p2-bloque2.png}{Estado de DL y de las banderas al final del segundo bloque.}{fig:p2-bloque2}{emulador al terminar el segundo bloque}
- 
 \textbf{Observaciones.} En ambos bloques DL termina en C9h, pero la bandera S queda en 1 en el primero y en 0 en el segundo: \texttt{XOR dl, 0FFh} es una operación lógica y actualiza las banderas con su resultado, mientras que \texttt{NOT dl} solo invierte los bits y conserva las banderas de la instrucción anterior.
  
 \subsubsection{Variante con \texttt{xor ah, dl}}
  
 Se modificó la tercera y la séptima instrucción del programa, sustituyendo \texttt{xor dl, ah} por \texttt{xor ah, dl}:
- 
-\begin{lstlisting}[style=asm]
-    mov dl, 1Ah         ; primer bloque
-    mov ax, 02CC2h
-    xor ah, dl          ; AH = 2Ch XOR 1Ah = 36h (DL no cambia)
-    xor dl, 0FFh        ; DL = 1Ah XOR FFh = E5h
- 
-    mov dl, 1Ah         ; segundo bloque
-    mov ax, 2CC2h
-    xor ah, dl          ; AH = 36h
-    not dl              ; DL = E5h
-\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/7.png}
+    \caption{Bloques del segundo programa con \texttt{xor ah, dl}.}
+    \label{fig:segundoPrograma3y7.asm}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/7(1).png}
+    \caption{Estado de DL y de las banderas al final del primer bloque.}
+    \label{fig:segundoPrograma3y7.asm}
+\end{figure}+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/7(2).png}
+    \caption{Estado de DL y de las banderas al final del segundo bloque}
+    \label{fig:segundoPrograma3y7.asm}
+\end{figure}{Estado de DL y de las banderas al final del segundo bloque}
  
 \begin{table}[htbp]
   \centering
@@ -423,9 +442,7 @@ Se modificó la tercera y la séptima instrucción del programa, sustituyendo \t
     \hline
   \end{tabular}
 \end{table}
- 
-\figuraimagen{p2-xor-ah-dl.png}{Registros y banderas del segundo programa con \texttt{xor ah, dl}.}{fig:p2-xor-ah-dl}{emulador con la variante xor ah, dl}
- 
+  
 \textbf{Observaciones.} Ahora el resultado de la primera operación se guarda en AH (36h) y DL conserva su valor inicial (1Ah). Al final DL vale E5h en lugar de C9h, AH vale 36h en lugar de 2Ch, y en el primer bloque la bandera P pasa de 1 a 0 (E5h tiene cinco unos).
  
 \subsubsection{Control directo de banderas}
