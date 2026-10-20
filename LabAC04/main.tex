@@ -181,7 +181,7 @@
 \section{Objetivos}
  
 \textbf{Objetivo general.} Analizar la forma en que se ejecutan algunas instrucciones lógicas observando cómo estas afectan al registro de estados.
- 
+
 \textbf{Objetivos específicos.}
 \begin{itemize}
   \item Examinar detenidamente la manera en que se ejecutan algunas instrucciones lógicas.
@@ -243,30 +243,13 @@ Las banderas que se monitorearon se resumen en la Tabla~\ref{tab:banderas}.
   \item \texttt{CX = CX AND CX}: no cambia CX, solo actualiza las banderas.
 \end{itemize}
  
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-INICIO:
-    mov dl, dato1       ; DL = dato1 (9Ah)
-    mov ah, mascara1    ; AH = mascara1 (F0h)
-    and dl, ah          ; DL = DL AND AH  (operacion de 8 bits)
- 
-    mov cx, dato2       ; CX = dato2 (2CC2h)
-    mov bx, mascara2    ; BX = mascara2 (0F0Fh)
-    and cx, bx          ; CX = CX AND BX  (operacion de 16 bits)
- 
-    and cx, cx          ; CX no cambia; solo actualiza las banderas
-    ret
- 
-dato1    db 9Ah         ; 1 byte
-dato2    dw 02CC2h      ; 2 bytes (se guarda C2 2C, byte bajo primero)
-mascara1 db 0F0h        ; 1 byte
-mascara2 dw 0F0Fh       ; 2 bytes
-END
-\end{lstlisting}
- 
-\figuraimagen{p1-codigo.png}{Código del primer programa en el editor de EMU8086.}{fig:p1-codigo}{código fuente del primer programa}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/1.png}
+    \caption{Código del primer programa en el editor de EMU8086.}
+    \label{fig:programa1.com}
+\end{figure}
+
 \textbf{Procedimiento.}
 \begin{itemize}
   \item Se compiló y se ejecutó paso a paso, anotando tras cada \texttt{AND} los operandos, el resultado y las banderas (Tabla~\ref{tab:p1-and}).
@@ -290,9 +273,14 @@ END
     \hline
   \end{tabular}
 \end{table}
- 
-\figuraimagen{p1-and.png}{Registros y banderas tras ejecutar las instrucciones \texttt{AND}.}{fig:p1-and}{emulador con registros y banderas después de las AND}
- 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/2.png}
+    \caption{Registros y banderas ejecutando las instrucciones AND.}
+    \label{fig:programa1.com}
+\end{figure}
+  
 \begin{table}[htbp]
   \centering
   \caption{Resultados del primer programa con \texttt{OR}.}
@@ -310,8 +298,13 @@ END
   \end{tabular}
 \end{table}
  
-\figuraimagen{p1-or.png}{Registros y banderas tras ejecutar las instrucciones \texttt{OR}.}{fig:p1-or}{emulador con registros y banderas después de las OR}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/3.png}
+    \caption{Registros y banderas ejecutando las instrucciones OR.}
+    \label{fig:programa1OR.com}
+\end{figure}
+
 \begin{table}[htbp]
   \centering
   \caption{Resultados del primer programa con \texttt{XOR}.}
@@ -329,7 +322,12 @@ END
   \end{tabular}
 \end{table}
  
-\figuraimagen{p1-xor.png}{Registros y banderas tras ejecutar las instrucciones \texttt{XOR}.}{fig:p1-xor}{emulador con registros y banderas después de las XOR}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/4.png}
+    \caption{Registros y banderas ejecutando las instrucciones OR.}
+    \label{fig:programa1XOR.com}
+\end{figure}
  
 \textbf{Observaciones.} Con la máscara F0h, \texttt{AND} conserva el nibble alto y borra el bajo (90h), \texttt{OR} pone en 1 el nibble alto y conserva el bajo (FAh) y \texttt{XOR} invierte el nibble alto y conserva el bajo (6Ah). En las tres operaciones C y O quedaron en 0. Con \texttt{XOR} la tercera instrucción dejó CX en 0000h y activó Z.
  
@@ -340,25 +338,13 @@ END
  
 \subsubsection{Bloques originales}
  
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-INICIO:
-    mov dl, 1Ah         ; primer bloque
-    mov ax, 02CC2h      ; AH = 2Ch, AL = C2h
-    xor dl, ah          ; DL = 1Ah XOR 2Ch = 36h
-    xor dl, 0FFh        ; DL = 36h XOR FFh = C9h (invierte los 8 bits)
- 
-    mov dl, 1Ah         ; segundo bloque
-    mov ax, 2CC2h
-    xor dl, ah          ; DL = 36h
-    not dl              ; DL = C9h (NOT no modifica banderas)
-    ret
-END
-\end{lstlisting}
- 
-\figuraimagen{p2-codigo.png}{Código del segundo programa en el editor de EMU8086.}{fig:p2-codigo}{código fuente del segundo programa}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/5.png}
+    \caption{Código del segundo programa en el editor de EMU8086.}
+    \label{fig:segundoPrograma.asm}
+\end{figure}
+
 \begin{table}[htbp]
   \centering
   \caption{Ejecución paso a paso del segundo programa original.}
