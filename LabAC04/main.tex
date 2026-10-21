@@ -411,7 +411,7 @@ Se modificó la tercera y la séptima instrucción del programa, sustituyendo \t
     \includegraphics[width=0.91\textwidth]{img/7(1).png}
     \caption{Estado de DL y de las banderas al final del primer bloque.}
     \label{fig:segundoPrograma3y7.asm}
-\end{figure}+
+\end{figure}
 
 \begin{figure}[H]
     \centering
@@ -449,28 +449,12 @@ Se modificó la tercera y la séptima instrucción del programa, sustituyendo \t
  
 Se insertaron instrucciones que modifican banderas sin depender del resultado de ninguna operación (se tomó como base el programa original):
  
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-INICIO:
-    mov dl, 1Ah         ; primer bloque
-    mov ax, 02CC2h
-    xor dl, ah
-    xor dl, 0FFh
-    stc                 ; activa la bandera C
-    std                 ; activa la bandera D
-    cli                 ; desactiva la bandera I
- 
-    mov dl, 1Ah         ; segundo bloque
-    mov ax, 2CC2h
-    clc                 ; desactiva la bandera C
-    cld                 ; desactiva la bandera D
-    sti                 ; activa la bandera I
-    xor dl, ah
-    not dl
-    ret
-END
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/8.png}
+    \caption{Bloques del segundo programa con instrucciones de control de banderas.}
+    \label{fig:controlBanderas.asm}
+\end{figure}
  
 \begin{table}[htbp]
   \centering
@@ -497,8 +481,13 @@ END
   \end{tabular}
 \end{table}
  
-\figuraimagen{p2-banderas.png}{Banderas C, D e I tras ejecutar las instrucciones de control de banderas.}{fig:p2-banderas}{emulador con las banderas C, D e I modificadas}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/8(1).png}
+    \caption{Emulando las instrucciones, banderas \textit{C, D} e \textit{I} modificadas.}
+    \label{fig:controlBanderas.asm}
+\end{figure}
+
 \textbf{Conclusión de la actividad.} Existen dos tipos de banderas: las que dependen del resultado de una operación (S, Z, P, y también C y O en las operaciones lógicas) y las que se controlan explícitamente con instrucciones propias (C, D e I). Una operación lógica posterior puede cambiar C (la deja en 0), pero no altera D ni I.
  
 % ------------------------------------------------------------
