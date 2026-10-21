@@ -495,22 +495,13 @@ Se insertaron instrucciones que modifican banderas sin depender del resultado de
  
 \textbf{Objetivo.} Aprender a comprobar el estado de un bit usando una máscara y comparar \texttt{AND} con \texttt{TEST}: ambas actualizan las banderas igual, pero \texttt{TEST} no guarda el resultado.
  
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-INICIO:
-    mov ah, 0B9h        ; en binario 1011_1001
-    and ah, 40h         ; mascara 0100_0000 (prueba el bit D6)
-                        ; si Z=1 implica que D6=0
-    or  ah, 01h         ; el resultado deja de ser 0, por lo que Z pasa a 0
-    mov ah, 0B9h        ; se restaura el dato
-    test ah, 40h        ; igual que AND pero sin modificar AH
-    ret
-END
-\end{lstlisting}
- 
-\figuraimagen{p3-codigo.png}{Código del tercer programa en el editor de EMU8086.}{fig:p3-codigo}{código fuente del tercer programa}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/9.png}
+    \caption{Código del tercer programa en el editor de EMU8086.}
+    \label{fig:tercerPrograma.asm}
+\end{figure}
+
 \subsubsection{Máscara 40h (bit D6)}
  
 \begin{table}[htbp]
@@ -534,16 +525,33 @@ END
   \end{tabular}
 \end{table}
  
-\figuraimagen{p3-and.png}{Estado de AH y de las banderas tras \texttt{and ah, 40h}.}{fig:p3-and}{emulador después de la instrucción AND}
- 
-\figuraimagen{p3-test.png}{Estado de AH y de las banderas tras \texttt{test ah, 40h}.}{fig:p3-test}{emulador después de la instrucción TEST}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/9(1).png}
+    \caption{Emulador después de la instrucción \textit{AND}.}
+    \label{fig:tercerPrograma.asm}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/9(2).png}
+    \caption{Emulador después de la instrucción \textit{TEST}.}
+    \label{fig:p3-test}
+\end{figure}
+
 \textbf{Interpretación.} Al ejecutar las dos primeras instrucciones se activaron Z y P, y AH quedó en 00h. El resultado indica que el bit D6 del dato B9h (1011 1001) vale 0. Con \texttt{TEST} las banderas son las mismas, pero AH conserva su valor B9h.
  
 \subsubsection{Máscara 08h (bit D3)}
  
 Se cambió el dato 40h por 08h en la segunda y quinta instrucción.
  
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/10.png}
+    \caption{Emulador con la máscara 08h.}
+    \label{fig:tercerPrograma08h.asm}
+\end{figure}
+
 \begin{table}[htbp]
   \centering
   \caption{Ejecución del tercer programa con la máscara 08h.}
@@ -565,8 +573,20 @@ Se cambió el dato 40h por 08h en la segunda y quinta instrucción.
   \end{tabular}
 \end{table}
  
-\figuraimagen{p3-mascara-08.png}{Estado de AH y de las banderas con la máscara 08h.}{fig:p3-mascara-08}{emulador con la máscara 08h}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/10(1).png}
+    \caption{Emulador con la máscara \textit{08h} después de la instrucción \textit{AND}.}
+    \label{fig:tercerPrograma08h.asm}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/10(2).png}
+    \caption{Emulador con la máscara \textit{08h} después de la instrucción \textit{TEST}.}
+    \label{fig:tercerPrograma08h.asm}
+\end{figure}
+
 \textbf{Interpretación.} Con la máscara 08h se prueba el bit D3. Como en B9h ese bit vale 1, el resultado de la operación es distinto de cero y la bandera Z queda en 0: el resultado del programa cambió respecto al caso de la máscara 40h.
  
 % ============================================================
