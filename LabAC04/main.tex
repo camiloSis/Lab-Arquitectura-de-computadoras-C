@@ -247,7 +247,7 @@ Las banderas que se monitorearon se resumen en la Tabla~\ref{tab:banderas}.
     \centering
     \includegraphics[width=0.8\textwidth]{img/1.png}
     \caption{Código del primer programa en el editor de EMU8086.}
-    \label{fig:programa1.com}
+    \label{fig:p1-and-codigo}
 \end{figure}
 
 \textbf{Procedimiento.}
@@ -278,7 +278,7 @@ Las banderas que se monitorearon se resumen en la Tabla~\ref{tab:banderas}.
     \centering
     \includegraphics[width=0.91\textwidth]{img/2.png}
     \caption{Registros y banderas ejecutando las instrucciones AND.}
-    \label{fig:programa1.com}
+    \label{fig:p1-and-ejecucion}
 \end{figure}
   
 \begin{table}[htbp]
@@ -342,14 +342,14 @@ Las banderas que se monitorearon se resumen en la Tabla~\ref{tab:banderas}.
     \centering
     \includegraphics[width=0.85\textwidth]{img/5.png}
     \caption{Código del segundo programa en el editor de EMU8086.}
-    \label{fig:bloque1.asm}
+    \label{fig:p2-codigo-original}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{img/5(1).png}
     \caption{Registros y estado de flags en la ejecución del primer bloque.}
-    \label{fig:bloque1.asm}
+    \label{fig:p2-bloque1-ejecucion}
 \end{figure}
 
 \begin{figure}[H]
@@ -403,21 +403,21 @@ Se modificó la tercera y la séptima instrucción del programa, sustituyendo \t
     \centering
     \includegraphics[width=0.91\textwidth]{img/7.png}
     \caption{Bloques del segundo programa con \texttt{xor ah, dl}.}
-    \label{fig:segundoPrograma3y7.asm}
+    \label{fig:p2-variante-codigo}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.91\textwidth]{img/7(1).png}
     \caption{Estado de DL y de las banderas al final del primer bloque.}
-    \label{fig:segundoPrograma3y7.asm}
+    \label{fig:p2-variante-bloque1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.91\textwidth]{img/7(2).png}
     \caption{Estado de DL y de las banderas al final del segundo bloque}
-    \label{fig:segundoPrograma3y7.asm}
+    \label{fig:p2-variante-bloque2}
 \end{figure}{Estado de DL y de las banderas al final del segundo bloque}
  
 \begin{table}[htbp]
@@ -453,7 +453,7 @@ Se insertaron instrucciones que modifican banderas sin depender del resultado de
     \centering
     \includegraphics[width=0.91\textwidth]{img/8.png}
     \caption{Bloques del segundo programa con instrucciones de control de banderas.}
-    \label{fig:controlBanderas.asm}
+    \label{fig:p2-control-banderas-codigo}
 \end{figure}
  
 \begin{table}[htbp]
@@ -485,7 +485,7 @@ Se insertaron instrucciones que modifican banderas sin depender del resultado de
     \centering
     \includegraphics[width=0.91\textwidth]{img/8(1).png}
     \caption{Emulando las instrucciones, banderas \textit{C, D} e \textit{I} modificadas.}
-    \label{fig:controlBanderas.asm}
+    \label{fig:p2-control-banderas-ejecucion}
 \end{figure}
 
 \textbf{Conclusión de la actividad.} Existen dos tipos de banderas: las que dependen del resultado de una operación (S, Z, P, y también C y O en las operaciones lógicas) y las que se controlan explícitamente con instrucciones propias (C, D e I). Una operación lógica posterior puede cambiar C (la deja en 0), pero no altera D ni I.
@@ -499,7 +499,7 @@ Se insertaron instrucciones que modifican banderas sin depender del resultado de
     \centering
     \includegraphics[width=0.86\textwidth]{img/9.png}
     \caption{Código del tercer programa en el editor de EMU8086.}
-    \label{fig:tercerPrograma.asm}
+    \label{fig:p3-codigo}
 \end{figure}
 
 \subsubsection{Máscara 40h (bit D6)}
@@ -529,7 +529,7 @@ Se insertaron instrucciones que modifican banderas sin depender del resultado de
     \centering
     \includegraphics[width=0.86\textwidth]{img/9(1).png}
     \caption{Emulador después de la instrucción \textit{AND}.}
-    \label{fig:tercerPrograma.asm}
+    \label{fig:p3-and-40-ejecucion}
 \end{figure}
 
 \begin{figure}[H]
@@ -549,7 +549,7 @@ Se cambió el dato 40h por 08h en la segunda y quinta instrucción.
     \centering
     \includegraphics[width=0.86\textwidth]{img/10.png}
     \caption{Emulador con la máscara 08h.}
-    \label{fig:tercerPrograma08h.asm}
+    \label{fig:p3-mascara-08-ejecucion}
 \end{figure}
 
 \begin{table}[htbp]
@@ -577,14 +577,14 @@ Se cambió el dato 40h por 08h en la segunda y quinta instrucción.
     \centering
     \includegraphics[width=0.86\textwidth]{img/10(1).png}
     \caption{Emulador con la máscara \textit{08h} después de la instrucción \textit{AND}.}
-    \label{fig:tercerPrograma08h.asm}
+    \label{fig:p3-and-08-ejecucion}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.86\textwidth]{img/10(2).png}
     \caption{Emulador con la máscara \textit{08h} después de la instrucción \textit{TEST}.}
-    \label{fig:tercerPrograma08h.asm}
+    \label{fig:p3-test-08-ejecucion}
 \end{figure}
 
 \textbf{Interpretación.} Con la máscara 08h se prueba el bit D3. Como en B9h ese bit vale 1, el resultado de la operación es distinto de cero y la bandera Z queda en 0: el resultado del programa cambió respecto al caso de la máscara 40h.
@@ -657,22 +657,13 @@ Los datos que declara el programa se almacenan en la memoria, dentro del mismo s
   \item \texttt{OR} con 1000\,0001b (81h): pone en 1 D7 y D0.
 \end{itemize}
  
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-INICIO:
-    mov ax, dato        ; AX = dato (se procesa AL, bits D7..D0)
-    xor al, 00101010b   ; invierte D5, D3 y D1
-    and al, 10101011b   ; borra D6, D4 y D2
-    or  al, 10000001b   ; pone en 1 D7 y D0
-    ret
- 
-dato dw 006Dh           ; dato de prueba: AL = 6Dh = 0110 1101b
-END
-\end{lstlisting}
- 
-\figuraimagen{tarea-codigo.png}{Código del programa de manipulación de bits.}{fig:tarea-codigo}{código fuente de la tarea complementaria}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/11.png}
+    \caption{Código del programa de manipulación de bits.}
+    \label{fig:programaComplementario.asm}
+\end{figure}
+
 \begin{table}[htbp]
   \centering
   \caption{Seguimiento del programa con el dato de prueba 6Dh.}
@@ -692,8 +683,13 @@ END
   \end{tabular}
 \end{table}
  
-\figuraimagen{tarea-resultado.png}{Registros del emulador al finalizar el programa de manipulación de bits.}{fig:tarea-resultado}{emulador con AX = 0083h al final del programa}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/11(2).png}
+    \caption{Registros del emulador al finalizar el programa de manipulación de bits.}
+    \label{fig:programaComplementario.com}
+\end{figure}
+
 El resultado final cumple el enunciado: D7 y D0 valen 1, D6, D4 y D2 valen 0, y D5, D3 y D1 quedaron invertidos respecto al dato original.
  
 % ============================================================
