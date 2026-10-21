@@ -172,8 +172,9 @@
 \section{Objetivos}
  
 \textbf{Objetivo general.} Analizar la forma en que se ejecutan algunas instrucciones aritméticas y de manejo de la pila.
- 
+
 \textbf{Objetivos específicos.}
+
 \begin{itemize}
   \item Observar el uso de algunas instrucciones aritméticas y las banderas que son afectadas.
   \item Identificar las banderas que afecta cada instrucción observada.
@@ -283,35 +284,26 @@ Las banderas que se monitorearon se resumen en la Tabla~\ref{tab:banderas} y las
   \item Los resultados se copian a memoria: AL en la dirección 011Eh y AX en 011Fh y 0120h (\textit{little endian}: DBh en 011Fh y 79h en 0120h).
 \end{itemize}
  
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-byte1 equ 125
-byte2 equ 150
-word1 equ 20A3h
-word2 equ 5938h
- 
-    mov al, byte1       ; suma de 2 numeros de 1 byte
-    add al, byte2       ; AL = 7Dh + 96h = 13h (con acarreo)
-    mov [011Eh], al     ; M[011Eh] = AL
- 
-    mov ax, word1       ; suma de 2 numeros de 2 bytes
-    add ax, word2       ; AX = 20A3h + 5938h = 79DBh
-    mov [011Fh], ax     ; M[011Fh] = DBh, M[0120h] = 79h
-    ret
-END
-\end{lstlisting}
- 
-\figuraimagen{p1-codigo.png}{Código del primer programa en el editor de EMU8086.}{fig:p1-codigo}{código fuente del primer programa}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/12.png}
+    \caption{Código del primer programa con ADD y ADC.}
+    \label{fig:primerProgramaLab05}
+\end{figure}
+
 \textbf{Procedimiento.}
 \begin{itemize}
   \item Se digitó y emuló el programa. Antes de ejecutarlo se anotó el contenido de las direcciones 011Eh, 011Fh y 0120h y el estado de las banderas (Figura~\ref{fig:p1-inicio}).
   \item Se ejecutó paso a paso, anotando en cada momento la memoria y las banderas (Tabla~\ref{tab:p1-tabla1}).
 \end{itemize}
  
-\figuraimagen{p1-inicio.png}{Estado inicial de la memoria (011Eh a 0120h) y de las banderas.}{fig:p1-inicio}{emulador antes de ejecutar el programa, con la ventana memory y las banderas}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/12(1).png}
+    \caption{Estado inicial de la memoria (011Eh a 0120h) y de las banderas.}
+    \label{fig:primerProgramaLab05}
+\end{figure}
+
 \begin{table}[htbp]
   \centering
   \small
@@ -338,10 +330,20 @@ END
   {\small <<Antes de la 2.ª suma>> es después de ejecutar \texttt{mov [011Eh], al} y \texttt{mov ax, word1}; \texttt{MOV} no modifica banderas.}
 \end{table}
  
-\figuraimagen{p1-suma1.png}{Registros, memoria y banderas después de la primera suma.}{fig:p1-suma1}{emulador después de add al, byte2}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/12(2).png}
+    \caption{Registros, memoria y banderas después de la primera suma.}
+    \label{fig:primerProgramaLab05}
+\end{figure}
  
-\figuraimagen{p1-suma2.png}{Registros, memoria y banderas después de la segunda suma y del último \texttt{mov}.}{fig:p1-suma2}{emulador después de add ax, word2 y del último mov}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/12(3).png}
+    \caption{Registros, memoria y banderas después de la segunda suma y del último \texttt{mov}.}
+    \label{fig:primerProgramaLab05}
+\end{figure}
+
 \textbf{Respuestas a las preguntas de la guía.}
 \begin{itemize}
   \item \textit{¿Con qué datos se realizan las operaciones y cuáles son los resultados?} Con 7Dh + 96h (125 + 150) en 8 bits, cuyo resultado es 13h con acarreo, y con 20A3h + 5938h en 16 bits, cuyo resultado es 79DBh.
@@ -370,7 +372,12 @@ Se volvió a cargar el programa y se invirtió manualmente la bandera C (de 0 a 
   \end{tabular}
 \end{table}
  
-\figuraimagen{p1-add-cf.png}{Resultados de \texttt{ADD} con el acarreo activado manualmente al inicio.}{fig:p1-add-cf}{emulador con C=1 antes de las sumas ADD}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/13.png}
+    \caption{Resultados de \texttt{ADD} con el acarreo activado manualmente al inicio.}
+    \label{fig: primerP_stc.asm}
+\end{figure}
  
 \textbf{Observaciones.} El resultado de ambas sumas \textbf{no cambió}: \texttt{ADD} no usa el valor previo de C, solo lo actualiza con el acarreo que produce la propia operación. En la segunda suma C pasó a 0 aunque antes valía 1.
  
@@ -378,16 +385,12 @@ Se volvió a cargar el programa y se invirtió manualmente la bandera C (de 0 a 
  
 Se sustituyeron las dos instrucciones \texttt{ADD} por \texttt{ADC} y se repitió el procedimiento desde la inversión del acarreo:
  
-\begin{lstlisting}[style=asm]
-    mov al, byte1
-    adc al, byte2       ; AL = AL + byte2 + C
-    mov [011Eh], al
- 
-    mov ax, word1
-    adc ax, word2       ; AX = AX + word2 + C
-    mov [011Fh], ax
-    ret
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/13(1).png}
+    \caption{Primer programa con \textit{ADC} y \textit{C} = 1 al inicio.}
+    \label{fig: primerP_adc.asm}
+\end{figure}
  
 \begin{table}[htbp]
   \centering
@@ -406,7 +409,12 @@ Se sustituyeron las dos instrucciones \texttt{ADD} por \texttt{ADC} y se repiti�
   \end{tabular}
 \end{table}
  
-\figuraimagen{p1-adc.png}{Resultados del primer programa con \texttt{ADC}.}{fig:p1-adc}{emulador con las instrucciones ADC ejecutadas}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/13(2).png}
+    \caption{Resultados del primer programa con \textit{ADC}.}
+    \label{fig: primerP_adc.asm}
+\end{figure}
  
 \textbf{Observaciones.} Con \texttt{ADC} ambos resultados aumentaron en 1 respecto a \texttt{ADD}: 13h pasó a 14h y 79DBh pasó a 79DCh, porque la instrucción suma además el acarreo. Las banderas A y P cambiaron porque dependen del resultado: 14h tiene dos unos (P = 1) y 79DCh tiene cinco (P = 0). Aunque se empiece con C = 0, la segunda suma también da 79DCh, ya que recibe el acarreo C = 1 que dejó la primera.
  
@@ -434,7 +442,19 @@ Se restauró \texttt{ADD} y se cambiaron los datos por: \texttt{byte1 equ 9Dh}, 
   {\small Entre paréntesis, el resultado completo incluyendo el acarreo.}
 \end{table}
  
-\figuraimagen{p1-datos-nuevos.png}{Registros, memoria y banderas con los datos modificados.}{fig:p1-datos-nuevos}{emulador con los datos 9Dh, 83h, 5938 y -5938}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/14.png}
+    \caption{Programa inicial con los datos modificados.}
+    \label{fig: primerP_modificado.asm}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/14(1).png}
+    \caption{Registros, memoria y banderas con los datos modificados (emulador con los datos 9Dh, 83h, 5938 y -5938).}
+    \label{fig: primerP_modificado.asm}
+\end{figure}
  
 \textbf{Observaciones.} En memoria quedaron 20h en 011Eh y 0000h en 011Fh y 0120h. Las banderas reaccionaron así:
 \begin{itemize}
