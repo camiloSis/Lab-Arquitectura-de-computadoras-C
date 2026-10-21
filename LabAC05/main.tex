@@ -1,0 +1,975 @@
+\documentclass[10pt]{article}
+
+% ---------- IDIOMA Y CODIFICACIÓN ----------
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{circuits.logic.US,babel}
+
+% ---------- TABLAS (Actividad 1: identificación de dispositivos) ----------
+\usepackage{booktabs}   % líneas de tabla profesionales (\toprule, \midrule, \bottomrule)
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage[table]{xcolor} % opcional, para color en encabezado
+\usepackage{tabularx}   % columnas que se ajustan al ancho de página
+\usepackage{longtable}  % tablas que pueden partirse entre páginas (útil si tu tabla de dispositivos es larga)
+\usepackage{caption}    % control de estilo de "Tabla X: ..."
+\usepackage{float}
+\usepackage{makecell}
+
+% ---------- GLOSARIO (Actividad 2) ----------
+% Enfoque simple con "description", sin necesidad de correr makeglossaries aparte
+% (evita agregar un paso extra a tu pipeline de compilación).
+\usepackage{enumitem}
+\newlist{glosario}{description}{1}
+\setlist[glosario]{
+    font=\normalfont\bfseries,
+    leftmargin=0pt,
+    labelsep=0.5em,
+    itemsep=0.5em
+}
+
+% ---------- Definiciones auxiliares ----------
+\lstdefinestyle{asm}{
+  language={[x86masm]Assembler},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=6pt,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=4
+}
+ 
+\providecommand{\espacioimagen}[1]{%
+  \fbox{\parbox[c][4.5cm][c]{0.9\linewidth}{\centering\itshape Insertar captura: #1}}}
+ 
+% \figuraimagen{archivo.png}{Leyenda}{etiqueta}{descripción del recuadro}
+\providecommand{\figuraimagen}[4]{%
+  \begin{figure}[htbp]
+    \centering
+    \IfFileExists{img/#1}{\includegraphics[width=0.9\linewidth]{img/#1}}{\espacioimagen{#4\\[2pt]{\upshape\small\texttt{img/#1}}}}
+    \caption{#2}\label{#3}
+  \end{figure}}
+ 
+
+%      \relleno{Tu texto}    -> muestra tu texto en rojo (útil para ir dejando borradores)
+\newcommand{\relleno}[1][\textbf{[COMPLETAR AQUÍ]}]{\textcolor{red}{#1}}
+% ---------- CONFIGURACIONES PARA ENCABEZADO Y PORTADA ----------
+\usepackage{colortbl}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=black,citecolor=black]{hyperref}
+
+% Definición de colores y columnas personalizadas (usadas en la portada)
+\definecolor{tablebackground}{rgb}{0.8, 0, 0}
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{N}{@{}m{0pt}@{}}
+\newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+
+% Variables de datos para la portada y encabezado
+\newcommand{\itemEmail}{ccapatinta@unsa.edu.pe}
+\newcommand{\itemStudent}{Camilo B.A. Capatinta Almanza (Teoría grupo B)}
+\newcommand{\itemCourse}{Lab. Arq. de computadoras}
+\newcommand{\itemCourseCode}{1702227}
+\newcommand{\itemSemester}{IV}
+\newcommand{\itemUniversity}{Universidad Nacional de San Agustín de Arequipa}
+\newcommand{\itemFaculty}{Facultad de Ingeniería de Producción y Servicios}
+\newcommand{\itemDepartment}{Departamento Académico de Ingeniería de Sistemas e Informática}
+\newcommand{\itemSchool}{Escuela Profesional de Ingeniería de Sistemas}
+\newcommand{\itemAcademic}{2026 - B}
+\newcommand{\itemInput}{20/10/2026}
+\newcommand{\itemOutput}{--/10/2026}
+\newcommand{\itemPracticeNumber}{05}
+\newcommand{\itemTheme}{Programación para el microprocesador INTEL - Instrucciones Aritméticas}
+
+% Configuración del encabezado y pie de página (fancyhdr)
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{40.51407pt}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+% Encabezado
+\fancyhead[L]{\raisebox{-0.2\height}{\includegraphics[width=3cm]{img/logo_episunsa.png}}}
+\fancyhead[C]{\fontsize{7}{7}\selectfont    \itemUniversity \\ \itemFaculty \\ \itemDepartment \\ \itemSchool \\ \textbf{\itemCourse}}
+\fancyhead[R]{\raisebox{-0.2\height}{\includegraphics[width=1.2cm]{img/logo_abet.png}}}
+
+% Pie de página
+\fancyfoot[L]{Estudiante Camilo Capatinta}
+\fancyfoot[C]{\itemCourse}
+\fancyfoot[R]{Página \thepage}
+
+\begin{document}
+
+% --- INICIO DE LA PORTADA ---
+	\vspace*{10px}
+	
+	\begin{center}
+		\parbox{0.8\textwidth}{\centering\fontsize{17}{20}\selectfont\textbf{Informe de laboratorio \itemPracticeNumber}}
+	\end{center}
+	\begin{center}
+		\parbox{0.8\textwidth}{\centering\textbf{\Large Tema: \itemTheme}}
+	\end{center}
+
+\begin{flushright}
+    \begin{tabular}{|M{2.5cm}|N|}
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white} \textbf{Nota}  \\
+        \hline 
+             \\[30pt]
+        \hline          
+    \end{tabular}
+\end{flushright}    
+
+\begin{table}[h!]
+    \begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}        
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white} \textbf{Estudiante} & \color{white}\textbf{Escuela}  & \color{white}\textbf{Asignatura}   \\
+        \hline 
+        {\itemStudent \par \itemEmail} & \itemSchool & {\itemCourse \par Semestre: \itemSemester \par Código: \itemCourseCode}     \\
+        \hline          
+    \end{tabular}
+\end{table}     
+
+\begin{table}[H]
+    \begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white}\textbf{Laboratorio} & \color{white}\textbf{Tema}  & \color{white}\textbf{Duración}   \\
+        \hline 
+        \itemPracticeNumber & \itemTheme & 02 horas   \\
+        \hline 
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \begin{tabular}{|x{4.7cm}|x{4.8cm}|x{4.8cm}|}
+        \hline 
+        \rowcolor{tablebackground}
+        \color{white}\textbf{Semestre académico} & \color{white}\textbf{Fecha de inicio}  & \color{white}\textbf{Fecha de entrega}   \\
+        \hline 
+        \itemAcademic & \itemInput &  \itemOutput  \\
+        \hline 
+    \end{tabular}
+\end{table}
+
+\newpage
+\tableofcontents
+\thispagestyle{plain}
+\clearpage
+
+\section{Objetivos}
+ 
+\textbf{Objetivo general.} Analizar la forma en que se ejecutan algunas instrucciones aritméticas y de manejo de la pila.
+ 
+\textbf{Objetivos específicos.}
+\begin{itemize}
+  \item Observar el uso de algunas instrucciones aritméticas y las banderas que son afectadas.
+  \item Identificar las banderas que afecta cada instrucción observada.
+  \item Utilizar correctamente los registros del microprocesador al realizar operaciones aritméticas, tanto de 8 bits como de 16 bits.
+  \item Analizar detenidamente el proceso de cada operación.
+\end{itemize}
+ 
+% ============================================================
+\section{Materiales y equipos}
+ 
+\begin{itemize}
+  \item Guía de laboratorio.
+  \item Computadora PC con el programa EMU8086.
+\end{itemize}
+ 
+% ============================================================
+\section{Actividades}
+ 
+\subsection{Preparación del entorno}
+ 
+\begin{itemize}
+  \item Se ejecutó el emulador EMU8086 haciendo doble clic en su icono del escritorio y se creó un nuevo documento tipo COM.
+  \item Cada programa se escribió con su encabezado \texttt{\#make\_COM\#} y \texttt{org 100h}, necesario para generar un archivo \texttt{.COM}.
+  \item Para observar el efecto de cada instrucción se usó la ejecución paso a paso (\textit{single step}), junto con las ventanas \textbf{flags} y \textbf{memory} del emulador.
+\end{itemize}
+ 
+Las banderas que se monitorearon se resumen en la Tabla~\ref{tab:banderas} y las instrucciones aritméticas estudiadas en la Tabla~\ref{tab:instrucciones}.
+ 
+\begin{table}[htbp]
+  \centering
+  \caption{Banderas del registro de estados utilizadas en la práctica.}
+  \label{tab:banderas}
+  \begin{tabular}{|c|p{3cm}|p{6.5cm}|}
+    \hline
+    \textbf{Bandera} & \textbf{Nombre} & \textbf{Se activa (=1) cuando\ldots} \\
+    \hline
+    O & Desbordamiento (\textit{overflow}) & el resultado, interpretado con signo, no cabe en el tamaño del operando. \\
+    \hline
+    S & Signo & el bit más significativo del resultado es 1 (bit 7 en operaciones de 8 bits, bit 15 en las de 16 bits). \\
+    \hline
+    Z & Cero & el resultado de la operación es 0. \\
+    \hline
+    A & Acarreo auxiliar & hay acarreo (suma) o préstamo (resta) entre el bit 3 y el bit 4. \\
+    \hline
+    P & Paridad & el byte bajo del resultado tiene un número par de unos. \\
+    \hline
+    C & Acarreo (\textit{carry}) & hay acarreo fuera del bit más significativo (suma) o préstamo (resta), interpretando los datos sin signo. \\
+    \hline
+  \end{tabular}
+\end{table}
+ 
+\begin{table}[htbp]
+  \centering
+  \caption{Instrucciones aritméticas estudiadas.}
+  \label{tab:instrucciones}
+  \begin{tabular}{|l|p{4.2cm}|p{5.6cm}|}
+    \hline
+    \textbf{Instrucción} & \textbf{Operación} & \textbf{Banderas y observaciones} \\
+    \hline
+    \texttt{ADD} & destino $\leftarrow$ destino $+$ fuente & Modifica O, S, Z, A, P y C. Ignora el acarreo previo. \\
+    \hline
+    \texttt{ADC} & destino $\leftarrow$ destino $+$ fuente $+$ C & Modifica O, S, Z, A, P y C. Suma el acarreo de la operación anterior. \\
+    \hline
+    \texttt{SUB} & destino $\leftarrow$ destino $-$ fuente & Modifica O, S, Z, A, P y C. C = 1 indica préstamo. \\
+    \hline
+    \texttt{SBB} & destino $\leftarrow$ destino $-$ fuente $-$ C & Modifica O, S, Z, A, P y C. Resta el préstamo de la operación anterior. \\
+    \hline
+    \texttt{MUL} & AX $\leftarrow$ AL $\times$ fuente (8 bits, sin signo) & Solo C y O (= 1 si AH $\neq$ 0). S, Z, A y P quedan indefinidas. \\
+    \hline
+    \texttt{IMUL} & AX $\leftarrow$ AL $\times$ fuente (8 bits, con signo) & Solo C y O (= 1 si el producto no cabe en AL con signo). Las demás quedan indefinidas. \\
+    \hline
+    \texttt{DIV} & AL $\leftarrow$ AX $\div$ fuente, AH $\leftarrow$ residuo (sin signo) & Todas las banderas quedan indefinidas. Error si el divisor es 0 o el cociente supera FFh. \\
+    \hline
+    \texttt{IDIV} & AL $\leftarrow$ AX $\div$ fuente, AH $\leftarrow$ residuo (con signo) & Todas las banderas quedan indefinidas. Error si el divisor es 0 o el cociente sale de $-128$ a $127$. \\
+    \hline
+  \end{tabular}
+\end{table}
+ 
+% ------------------------------------------------------------
+\subsection{Primer programa: suma con ADD y ADC}
+ 
+\textbf{Objetivo.} Observar la suma de dos números de 1 byte y de dos números de 2 bytes, cómo se actualizan las banderas y qué diferencia hay entre \texttt{ADD} y \texttt{ADC}. Los datos se declaran con la directiva \texttt{EQU} (Tabla~\ref{tab:p1-datos}).
+ 
+\begin{table}[htbp]
+  \centering
+  \caption{Datos declarados en el primer programa.}
+  \label{tab:p1-datos}
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Constante} & \textbf{Decimal} & \textbf{Hexadecimal} & \textbf{Tamaño} \\
+    \hline
+    \texttt{byte1} & 125 & 7Dh & 8 bits \\
+    \hline
+    \texttt{byte2} & 150 & 96h & 8 bits \\
+    \hline
+    \texttt{word1} & 8355 & 20A3h & 16 bits \\
+    \hline
+    \texttt{word2} & 22840 & 5938h & 16 bits \\
+    \hline
+  \end{tabular}
+\end{table}
+ 
+\textbf{Funcionamiento.}
+\begin{itemize}
+  \item \texttt{AL = byte1 + byte2} (8 bits): 125 + 150 = 275, que no cabe en un byte. AL queda en 13h y el noveno bit pasa a la bandera C.
+  \item \texttt{AX = word1 + word2} (16 bits): 20A3h + 5938h = 79DBh.
+  \item Los resultados se copian a memoria: AL en la dirección 011Eh y AX en 011Fh y 0120h (\textit{little endian}: DBh en 011Fh y 79h en 0120h).
+\end{itemize}
+ 
+\begin{lstlisting}[style=asm]
+#make_COM#
+org 100h
+byte1 equ 125
+byte2 equ 150
+word1 equ 20A3h
+word2 equ 5938h
+ 
+    mov al, byte1       ; suma de 2 numeros de 1 byte
+    add al, byte2       ; AL = 7Dh + 96h = 13h (con acarreo)
+    mov [011Eh], al     ; M[011Eh] = AL
+ 
+    mov ax, word1       ; suma de 2 numeros de 2 bytes
+    add ax, word2       ; AX = 20A3h + 5938h = 79DBh
+    mov [011Fh], ax     ; M[011Fh] = DBh, M[0120h] = 79h
+    ret
+END
+\end{lstlisting}
+ 
+\figuraimagen{p1-codigo.png}{Código del primer programa en el editor de EMU8086.}{fig:p1-codigo}{código fuente del primer programa}
+ 
+\textbf{Procedimiento.}
+\begin{itemize}
+  \item Se digitó y emuló el programa. Antes de ejecutarlo se anotó el contenido de las direcciones 011Eh, 011Fh y 0120h y el estado de las banderas (Figura~\ref{fig:p1-inicio}).
+  \item Se ejecutó paso a paso, anotando en cada momento la memoria y las banderas (Tabla~\ref{tab:p1-tabla1}).
+\end{itemize}
+ 
+\figuraimagen{p1-inicio.png}{Estado inicial de la memoria (011Eh a 0120h) y de las banderas.}{fig:p1-inicio}{emulador antes de ejecutar el programa, con la ventana memory y las banderas}
+ 
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \caption{Tabla 1: memoria y banderas durante la ejecución del primer programa (con \texttt{ADD}).}
+  \label{tab:p1-tabla1}
+  \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Momento} & \textbf{011Eh} & \textbf{011Fh} & \textbf{0120h} & \textbf{O} & \textbf{S} & \textbf{Z} & \textbf{A} & \textbf{P} & \textbf{C} \\
+    \hline
+    Inicio & 00h & 00h & 00h & 0 & 0 & 0 & 0 & 0 & 0 \\
+    \hline
+    Después de la 1.ª suma & 00h & 00h & 00h & 0 & 0 & 0 & 1 & 0 & 1 \\
+    \hline
+    Antes de la 2.ª suma & 13h & 00h & 00h & 0 & 0 & 0 & 1 & 0 & 1 \\
+    \hline
+    Después de la 2.ª suma & 13h & 00h & 00h & 0 & 0 & 0 & 0 & 1 & 0 \\
+    \hline
+    Después del último \texttt{mov} & 13h & DBh & 79h & 0 & 0 & 0 & 0 & 1 & 0 \\
+    \hline
+  \end{tabular}
+ 
+  \smallskip
+  {\small <<Antes de la 2.ª suma>> es después de ejecutar \texttt{mov [011Eh], al} y \texttt{mov ax, word1}; \texttt{MOV} no modifica banderas.}
+\end{table}
+ 
+\figuraimagen{p1-suma1.png}{Registros, memoria y banderas después de la primera suma.}{fig:p1-suma1}{emulador después de add al, byte2}
+ 
+\figuraimagen{p1-suma2.png}{Registros, memoria y banderas después de la segunda suma y del último \texttt{mov}.}{fig:p1-suma2}{emulador después de add ax, word2 y del último mov}
+ 
+\textbf{Respuestas a las preguntas de la guía.}
+\begin{itemize}
+  \item \textit{¿Con qué datos se realizan las operaciones y cuáles son los resultados?} Con 7Dh + 96h (125 + 150) en 8 bits, cuyo resultado es 13h con acarreo, y con 20A3h + 5938h en 16 bits, cuyo resultado es 79DBh.
+  \item \textit{¿Dónde se almacena el resultado al final?} En memoria: el byte 13h en 011Eh y la palabra 79DBh en 011Fh (DBh) y 0120h (79h). AX conserva además 79DBh.
+  \item \textit{¿Concuerda el resultado con lo esperado?} Sí. El resultado de 8 bits es 275 $-$ 256 = 19 = 13h, y el 256 que sobra es el acarreo que se ve en C.
+\end{itemize}
+ 
+\subsubsection{Acarreo invertido con \texttt{ADD}}
+ 
+Se volvió a cargar el programa y se invirtió manualmente la bandera C (de 0 a 1) antes de ejecutar (equivale a insertar \texttt{stc} al inicio). Se ejecutó hasta la primera suma y luego hasta la segunda.
+ 
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \caption{Primer programa con \texttt{ADD} y C = 1 al inicio.}
+  \label{tab:p1-add-cf}
+  \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Instrucción} & \textbf{Operandos} & \textbf{Resultado} & \textbf{O} & \textbf{S} & \textbf{Z} & \textbf{A} & \textbf{P} & \textbf{C} \\
+    \hline
+    \texttt{add al, byte2} & 7Dh, 96h & 13h & 0 & 0 & 0 & 1 & 0 & 1 \\
+    \hline
+    \texttt{add ax, word2} & 20A3h, 5938h & 79DBh & 0 & 0 & 0 & 0 & 1 & 0 \\
+    \hline
+  \end{tabular}
+\end{table}
+ 
+\figuraimagen{p1-add-cf.png}{Resultados de \texttt{ADD} con el acarreo activado manualmente al inicio.}{fig:p1-add-cf}{emulador con C=1 antes de las sumas ADD}
+ 
+\textbf{Observaciones.} El resultado de ambas sumas \textbf{no cambió}: \texttt{ADD} no usa el valor previo de C, solo lo actualiza con el acarreo que produce la propia operación. En la segunda suma C pasó a 0 aunque antes valía 1.
+ 
+\subsubsection{Variante con \texttt{ADC}}
+ 
+Se sustituyeron las dos instrucciones \texttt{ADD} por \texttt{ADC} y se repitió el procedimiento desde la inversión del acarreo:
+ 
+\begin{lstlisting}[style=asm]
+    mov al, byte1
+    adc al, byte2       ; AL = AL + byte2 + C
+    mov [011Eh], al
+ 
+    mov ax, word1
+    adc ax, word2       ; AX = AX + word2 + C
+    mov [011Fh], ax
+    ret
+\end{lstlisting}
+ 
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \caption{Primer programa con \texttt{ADC} y C = 1 al inicio.}
+  \label{tab:p1-adc}
+  \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Instrucción} & \textbf{Operandos} & \textbf{Resultado} & \textbf{O} & \textbf{S} & \textbf{Z} & \textbf{A} & \textbf{P} & \textbf{C} \\
+    \hline
+    \texttt{adc al, byte2} & 7Dh + 96h + 1 & 14h & 0 & 0 & 0 & 1 & 1 & 1 \\
+    \hline
+    \texttt{adc ax, word2} & 20A3h + 5938h + 1 & 79DCh & 0 & 0 & 0 & 0 & 0 & 0 \\
+    \hline
+  \end{tabular}
+\end{table}
+ 
+\figuraimagen{p1-adc.png}{Resultados del primer programa con \texttt{ADC}.}{fig:p1-adc}{emulador con las instrucciones ADC ejecutadas}
+ 
+\textbf{Observaciones.} Con \texttt{ADC} ambos resultados aumentaron en 1 respecto a \texttt{ADD}: 13h pasó a 14h y 79DBh pasó a 79DCh, porque la instrucción suma además el acarreo. Las banderas A y P cambiaron porque dependen del resultado: 14h tiene dos unos (P = 1) y 79DCh tiene cinco (P = 0). Aunque se empiece con C = 0, la segunda suma también da 79DCh, ya que recibe el acarreo C = 1 que dejó la primera.
+ 
+\subsubsection{Datos modificados}
+ 
+Se restauró \texttt{ADD} y se cambiaron los datos por: \texttt{byte1 equ 9Dh}, \texttt{byte2 equ 83h}, \texttt{word1 equ 5938} y \texttt{word2 equ -5938} (5938 = 1732h y $-5938$ = E8CEh en complemento a 2).
+ 
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \caption{Primer programa con los datos modificados (\texttt{ADD}).}
+  \label{tab:p1-datos-nuevos}
+  \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Instrucción} & \textbf{Operandos} & \textbf{Resultado} & \textbf{O} & \textbf{S} & \textbf{Z} & \textbf{A} & \textbf{P} & \textbf{C} \\
+    \hline
+    \texttt{add al, byte2} & 9Dh, 83h & 20h (120h) & 1 & 0 & 0 & 1 & 0 & 1 \\
+    \hline
+    \texttt{add ax, word2} & 1732h, E8CEh & 0000h (10000h) & 0 & 0 & 1 & 1 & 1 & 1 \\
+    \hline
+  \end{tabular}
+ 
+  \smallskip
+  {\small Entre paréntesis, el resultado completo incluyendo el acarreo.}
+\end{table}
+ 
+\figuraimagen{p1-datos-nuevos.png}{Registros, memoria y banderas con los datos modificados.}{fig:p1-datos-nuevos}{emulador con los datos 9Dh, 83h, 5938 y -5938}
+ 
+\textbf{Observaciones.} En memoria quedaron 20h en 011Eh y 0000h en 011Fh y 0120h. Las banderas reaccionaron así:
+\begin{itemize}
+  \item \textit{Suma de bytes.} 9Dh + 83h = 120h. C = 1 porque, sin signo, 157 + 131 = 288 supera 255. O = 1 porque, con signo, ($-99$) + ($-125$) = $-224$ no cabe en $-128$ a $127$ (dos negativos dan un resultado positivo). A = 1 porque Dh + 3h = 10h acarrea al nibble alto. S = 0 y Z = 0 porque 20h es positivo y distinto de cero, y P = 0 porque 20h tiene un solo uno.
+  \item \textit{Suma de palabras.} 5938 + ($-5938$) = 0, es decir, 1732h + E8CEh = 10000h. Z = 1 y P = 1 porque el resultado de 16 bits es 0000h, y S = 0. C = 1 porque, sin signo, la suma rebasa FFFFh. O = 0 porque sumar dos números de signos opuestos nunca desborda. A = 1 porque 2h + Eh = 10h.
+\end{itemize}
+ 
+% ------------------------------------------------------------
+\subsection{Segundo programa: resta con SUB y SBB}
+ 
+\textbf{Objetivo.} Observar la resta de números de 1 y de 2 bytes, el comportamiento de las banderas C y A según el minuendo sea mayor o menor que el sustraendo, y la diferencia entre \texttt{SUB} y \texttt{SBB}.
+ 
+\textbf{Funcionamiento.}
+\begin{itemize}
+  \item \texttt{CL = byte1 - byte2} (8 bits): 80 $-$ 69 = 11 (50h $-$ 45h = 0Bh).
+  \item \texttt{DX = word1 - word2} (16 bits): 26437 $-$ 325 = 26112 (6745h $-$ 0145h = 6600h).
+  \item El programa no copia los resultados a memoria: quedan en los registros CL y DX.
+\end{itemize}
+ 
+\begin{lstlisting}[style=asm]
+#make_COM#
+org 100h
+byte1 equ 80
+byte2 equ 69
+word1 equ 26437
+word2 equ 325
+ 
+    mov cl, byte1       ; resta de 2 numeros de 1 byte
+    sub cl, byte2       ; CL = 50h - 45h = 0Bh
+ 
+    mov dx, word1       ; resta de 2 numeros de 2 bytes
+    sub dx, word2       ; DX = 6745h - 0145h = 6600h
+    ret
+END
+\end{lstlisting}
+ 
+\figuraimagen{p2-codigo.png}{Código del segundo programa en el editor de EMU8086.}{fig:p2-codigo}{código fuente del segundo programa}
+ 
+\begin{table}[htbp]
+  \centering
+  \caption{Datos del segundo programa en decimal y en hexadecimal.}
+  \label{tab:p2-datos}
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Constante} & \textbf{Decimal} & \textbf{Hexadecimal} & \textbf{Papel} \\
+    \hline
+    \texttt{byte1} & 80 & 50h & minuendo (8 bits) \\
+    \hline
+    \texttt{byte2} & 69 & 45h & sustraendo (8 bits) \\
+    \hline
+    \texttt{word1} & 26437 & 6745h & minuendo (16 bits) \\
+    \hline
+    \texttt{word2} & 325 & 0145h & sustraendo (16 bits) \\
+    \hline
+  \end{tabular}
+\end{table}
+ 
+\textbf{Procedimiento.}
+\begin{itemize}
+  \item Se digitó y emuló el programa, anotando los minuendos y sustraendos en hexadecimal (Tabla~\ref{tab:p2-datos}).
+  \item Se ejecutó paso a paso observando los resultados y las banderas (\textbf{1.ª prueba}, \texttt{SUB}).
+  \item Se invirtió el orden de la operación, de modo que el minuendo pasa a ser sustraendo y viceversa (\textbf{2.ª prueba}, \texttt{SUB}):
+\end{itemize}
+ 
+\begin{lstlisting}[style=asm]
+    mov cl, byte2       ; ahora byte2 es el minuendo
+    sub cl, byte1       ; CL = 45h - 50h = F5h (hay prestamo)
+    mov dx, word2
+    sub dx, word1       ; DX = 0145h - 6745h = 9A00h
+\end{lstlisting}
+ 
+\begin{itemize}
+  \item Se restauró el programa original y se sustituyeron las instrucciones \texttt{SUB} por \texttt{SBB}, repitiendo las dos pruebas (\textbf{3.ª y 4.ª prueba}):
+\end{itemize}
+ 
+\begin{lstlisting}[style=asm]
+    mov cl, byte1
+    sbb cl, byte2       ; CL = CL - byte2 - C
+    mov dx, word1
+    sbb dx, word2       ; DX = DX - word2 - C
+\end{lstlisting}
+ 
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \caption{Tabla 2: resultados de las restas con \texttt{SUB} y \texttt{SBB} (C = 0 al inicio).}
+  \label{tab:p2-tabla2}
+  \begin{tabular}{|c|l|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Prueba} & \textbf{Instrucción} & \textbf{Minuendo} & \textbf{Sustraendo} & \textbf{Diferencia} & \textbf{O} & \textbf{S} & \textbf{Z} & \textbf{A} & \textbf{P} & \textbf{C} \\
+    \hline
+    1.ª \texttt{SUB} & \texttt{sub cl, byte2} & 50h & 45h & 0Bh & 0 & 0 & 0 & 1 & 0 & 0 \\
+    \hline
+    1.ª \texttt{SUB} & \texttt{sub dx, word2} & 6745h & 0145h & 6600h & 0 & 0 & 0 & 0 & 1 & 0 \\
+    \hline
+    2.ª \texttt{SUB} & \texttt{sub cl, byte1} & 45h & 50h & F5h & 0 & 1 & 0 & 0 & 1 & 1 \\
+    \hline
+    2.ª \texttt{SUB} & \texttt{sub dx, word1} & 0145h & 6745h & 9A00h & 0 & 1 & 0 & 0 & 1 & 1 \\
+    \hline
+    3.ª \texttt{SBB} & \texttt{sbb cl, byte2} & 50h & 45h & 0Bh & 0 & 0 & 0 & 1 & 0 & 0 \\
+    \hline
+    3.ª \texttt{SBB} & \texttt{sbb dx, word2} & 6745h & 0145h & 6600h & 0 & 0 & 0 & 0 & 1 & 0 \\
+    \hline
+    4.ª \texttt{SBB} & \texttt{sbb cl, byte1} & 45h & 50h & F5h & 0 & 1 & 0 & 0 & 1 & 1 \\
+    \hline
+    4.ª \texttt{SBB} & \texttt{sbb dx, word1} & 0145h & 6745h & 99FFh & 0 & 1 & 0 & 1 & 1 & 1 \\
+    \hline
+  \end{tabular}
+\end{table}
+ 
+\figuraimagen{p2-sub1.png}{Registros y banderas después de las restas con \texttt{SUB} (1.ª prueba).}{fig:p2-sub1}{emulador después de las dos restas SUB en el orden original}
+ 
+\figuraimagen{p2-sub2.png}{Registros y banderas con \texttt{SUB} en orden invertido (2.ª prueba).}{fig:p2-sub2}{emulador después de las restas SUB con minuendo y sustraendo invertidos}
+ 
+\figuraimagen{p2-sbb3.png}{Registros y banderas con \texttt{SBB} en el orden original (3.ª prueba).}{fig:p2-sbb3}{emulador después de las restas SBB en el orden original}
+ 
+\figuraimagen{p2-sbb4.png}{Registros y banderas con \texttt{SBB} en orden invertido (4.ª prueba).}{fig:p2-sbb4}{emulador después de las restas SBB con minuendo y sustraendo invertidos}
+ 
+\subsubsection{Acarreo activado manualmente}
+ 
+Se repitieron las pruebas activando manualmente la bandera C antes de cada resta (equivale a insertar \texttt{stc} antes de cada \texttt{sub} o \texttt{sbb}).
+ 
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \caption{Restas con C = 1 antes de cada operación.}
+  \label{tab:p2-acarreo}
+  \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Instrucción} & \textbf{Minuendo} & \textbf{Sustraendo} & \textbf{Diferencia} & \textbf{O} & \textbf{S} & \textbf{Z} & \textbf{A} & \textbf{P} & \textbf{C} \\
+    \hline
+    \texttt{sub cl, byte2} & 50h & 45h & 0Bh & 0 & 0 & 0 & 1 & 0 & 0 \\
+    \hline
+    \texttt{sub dx, word2} & 6745h & 0145h & 6600h & 0 & 0 & 0 & 0 & 1 & 0 \\
+    \hline
+    \texttt{sub cl, byte1} & 45h & 50h & F5h & 0 & 1 & 0 & 0 & 1 & 1 \\
+    \hline
+    \texttt{sub dx, word1} & 0145h & 6745h & 9A00h & 0 & 1 & 0 & 0 & 1 & 1 \\
+    \hline
+    \texttt{sbb cl, byte2} & 50h & 45h & 0Ah & 0 & 0 & 0 & 1 & 1 & 0 \\
+    \hline
+    \texttt{sbb dx, word2} & 6745h & 0145h & 65FFh & 0 & 0 & 0 & 1 & 1 & 0 \\
+    \hline
+    \texttt{sbb cl, byte1} & 45h & 50h & F4h & 0 & 1 & 0 & 0 & 0 & 1 \\
+    \hline
+    \texttt{sbb dx, word1} & 0145h & 6745h & 99FFh & 0 & 1 & 0 & 1 & 1 & 1 \\
+    \hline
+  \end{tabular}
+\end{table}
+ 
+\figuraimagen{p2-acarreo.png}{Resultados de las restas con el acarreo activado manualmente.}{fig:p2-acarreo}{emulador con C=1 antes de las restas SUB y SBB}
+ 
+\textbf{Observaciones.}
+\begin{itemize}
+  \item Con \texttt{SUB} el acarreo previo \textbf{no cambia} ninguna operación (Tabla~\ref{tab:p2-acarreo} es igual a la Tabla~\ref{tab:p2-tabla2} en las filas \texttt{SUB}).
+  \item Con \texttt{SBB} sí cambia: cada diferencia disminuye en 1 (0Bh pasa a 0Ah, 6600h pasa a 65FFh, F5h pasa a F4h), porque la instrucción resta además el préstamo.
+  \item Con \texttt{SBB} en orden invertido y C = 0 al inicio, la segunda resta ya da 99FFh en lugar de 9A00h: la primera resta dejó C = 1 (préstamo) y la segunda lo recibió.
+\end{itemize}
+ 
+% ------------------------------------------------------------
+\subsection{Tercer programa: multiplicación con MUL e IMUL}
+ 
+\textbf{Objetivo.} Observar la multiplicación de dos números de 1 byte, en qué registros se guardan los datos y el producto, y la diferencia entre multiplicar sin signo (\texttt{MUL}) y con signo (\texttt{IMUL}).
+ 
+\textbf{Funcionamiento.}
+\begin{itemize}
+  \item AH = AAh y AL = FFh. El valor de AH se pierde, porque el producto de 16 bits sobrescribe todo AX.
+  \item CL = 06h (multiplicador).
+  \item \texttt{mul cl}: AX = AL $\times$ CL = FFh $\times$ 06h = 05FAh (255 $\times$ 6 = 1530).
+\end{itemize}
+ 
+\begin{lstlisting}[style=asm]
+#make_COM#
+org 100h
+INICIO:
+    mov ah, 0AAh        ; multiplica 2 numeros de 1 byte
+    mov al, 0FFh        ; multiplicando
+    mov cl, 06          ; multiplicador (dato)
+    mul cl              ; AX = AL x CL
+    ret
+END
+\end{lstlisting}
+ 
+\figuraimagen{p3-codigo.png}{Código del tercer programa en el editor de EMU8086.}{fig:p3-codigo}{código fuente del tercer programa}
+ 
+\textbf{Respuestas a las preguntas de la guía.}
+\begin{itemize}
+  \item \textit{¿Qué registros están involucrados?} AL (multiplicando, implícito), CL (multiplicador) y AX (producto). AH solo se carga con AAh, pero no participa.
+  \item \textit{¿Qué datos se operan?} FFh y 06h.
+  \item \textit{¿Dónde se almacena el resultado?} En AX (AH = parte alta, AL = parte baja).
+\end{itemize}
+ 
+\textbf{Procedimiento.} Se ejecutó paso a paso con el dato 06 y con \texttt{MUL} (Figura~\ref{fig:p3-mul}); luego con CL = $-06$ (Figura~\ref{fig:p3-mul-neg}); después se cambió \texttt{mul cl} por \texttt{imul cl} y se probó con 06 (Figura~\ref{fig:p3-imul}) y con $-06$ (Figura~\ref{fig:p3-imul-neg}).
+ 
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \caption{Tabla 3: multiplicación con \texttt{MUL} e \texttt{IMUL}.}
+  \label{tab:p3-tabla3}
+  \begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+    \textbf{Instrucción} & \textbf{Dato} & \textbf{Multiplicando (AL)} & \textbf{Multiplicador (CL)} & \textbf{Producto (AX)} & \textbf{C/O} \\
+    \hline
+    \texttt{MUL} & 06 & FFh = 255 & 06h = 6 & 05FAh = 1530 & 1/1 \\
+    \hline
+    \texttt{MUL} & $-06$ & FFh = 255 & FAh = 250 & F906h = 63750 & 1/1 \\
+    \hline
+    \texttt{IMUL} & 06 & FFh = $-1$ & 06h = 6 & FFFAh = $-6$ & 0/0 \\
+    \hline
+    \texttt{IMUL} & $-06$ & FFh = $-1$ & FAh = $-6$ & 0006h = 6 & 0/0 \\
+    \hline
+  \end{tabular}
+ 
+  \smallskip
+  {\small La columna C/O no la pide la guía, pero ayuda en el análisis. Las demás banderas quedan indefinidas.}
+\end{table}
+ 
+\figuraimagen{p3-mul.png}{Resultado de \texttt{mul cl} con CL = 06.}{fig:p3-mul}{emulador después de mul cl con 06}
+ 
+\figuraimagen{p3-mul-neg.png}{Resultado de \texttt{mul cl} con CL = $-06$ (FAh).}{fig:p3-mul-neg}{emulador después de mul cl con -06}
+ 
+\figuraimagen{p3-imul.png}{Resultado de \texttt{imul cl} con CL = 06.}{fig:p3-imul}{emulador después de imul cl con 06}
+ 
+\figuraimagen{p3-imul-neg.png}{Resultado de \texttt{imul cl} con CL = $-06$ (FAh).}{fig:p3-imul-neg}{emulador después de imul cl con -06}
+ 
+\textbf{Observaciones.} Los datos son los mismos bits en las cuatro pruebas (FFh y 06h o FAh), pero \texttt{MUL} los interpreta como números sin signo e \texttt{IMUL} como números con signo, y por eso los productos son distintos. Con \texttt{MUL} la parte alta del producto (AH $\neq$ 0) activa C y O. Con \texttt{IMUL} el producto con signo cabe en AL, así que C y O quedan en 0.
+ 
+% ------------------------------------------------------------
+\subsection{Cuarto programa: división con DIV e IDIV}
+ 
+\textbf{Objetivo.} Observar la división de un número de 16 bits entre uno de 8 bits, en qué registros quedan el cociente y el residuo, y la diferencia entre dividir sin signo (\texttt{DIV}) y con signo (\texttt{IDIV}).
+ 
+\textbf{Funcionamiento.}
+\begin{itemize}
+  \item AX = 123 = 007Bh (dividendo de 16 bits).
+  \item CL = 05h (divisor, el dato).
+  \item \texttt{div cl}: AL = cociente = 123 $\div$ 5 = 24 (18h) y AH = residuo = 3 (03h). AX queda en 0318h.
+\end{itemize}
+ 
+\begin{lstlisting}[style=asm]
+#make_COM#
+org 100h
+INICIO:
+    mov ax, 123         ; dividendo de 16 bits
+    mov cl, 05          ; divisor (dato)
+    div cl              ; AL = AX / CL (cociente), AH = AX mod CL (residuo)
+    ret
+END
+\end{lstlisting}
+ 
+\figuraimagen{p4-codigo.png}{Código del cuarto programa en el editor de EMU8086.}{fig:p4-codigo}{código fuente del cuarto programa}
+ 
+\textbf{Respuestas a las preguntas de la guía.}
+\begin{itemize}
+  \item \textit{¿Qué registros están involucrados?} AX (dividendo), CL (divisor), AL (cociente) y AH (residuo).
+  \item \textit{¿Qué datos se operan?} 123 (007Bh) y 05h.
+  \item \textit{¿Dónde se almacena el resultado?} En AX: el cociente en AL y el residuo en AH.
+\end{itemize}
+ 
+\textbf{Procedimiento.} Se siguió el mismo procedimiento del tercer programa: \texttt{DIV} con 05 y con $-05$ (Figuras~\ref{fig:p4-div} y~\ref{fig:p4-div-neg}); luego se cambió a \texttt{IDIV} y se probó con 05 y con $-05$ (Figuras~\ref{fig:p4-idiv} y~\ref{fig:p4-idiv-neg}).
+ 
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \caption{Tabla 4: división con \texttt{DIV} e \texttt{IDIV}.}
+  \label{tab:p4-tabla4}
+  \begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+    \textbf{Instrucción} & \textbf{Dato} & \textbf{Dividendo (AX)} & \textbf{Divisor (CL)} & \textbf{Cociente (AL)} & \textbf{Residuo (AH)} \\
+    \hline
+    \texttt{DIV} & 05 & 007Bh = 123 & 05h = 5 & 18h = 24 & 03h = 3 \\
+    \hline
+    \texttt{DIV} & $-05$ & 007Bh = 123 & FBh = 251 & 00h = 0 & 7Bh = 123 \\
+    \hline
+    \texttt{IDIV} & 05 & 007Bh = $+123$ & 05h = $+5$ & 18h = $+24$ & 03h = $+3$ \\
+    \hline
+    \texttt{IDIV} & $-05$ & 007Bh = $+123$ & FBh = $-5$ & E8h = $-24$ & 03h = $+3$ \\
+    \hline
+  \end{tabular}
+ 
+  \smallskip
+  {\small Las banderas quedan indefinidas después de \texttt{DIV} e \texttt{IDIV}.}
+\end{table}
+ 
+\figuraimagen{p4-div.png}{Resultado de \texttt{div cl} con CL = 05.}{fig:p4-div}{emulador después de div cl con 05}
+ 
+\figuraimagen{p4-div-neg.png}{Resultado de \texttt{div cl} con CL = $-05$ (FBh).}{fig:p4-div-neg}{emulador después de div cl con -05}
+ 
+\figuraimagen{p4-idiv.png}{Resultado de \texttt{idiv cl} con CL = 05.}{fig:p4-idiv}{emulador después de idiv cl con 05}
+ 
+\figuraimagen{p4-idiv-neg.png}{Resultado de \texttt{idiv cl} con CL = $-05$ (FBh).}{fig:p4-idiv-neg}{emulador después de idiv cl con -05}
+ 
+\subsubsection{Divisor igual a cero}
+ 
+Se cambió el dato por 00h (\texttt{mov cl, 00h}) y se ejecutó el programa.
+ 
+\figuraimagen{p4-error.png}{Error del emulador al dividir entre 00h.}{fig:p4-error}{mensaje de error (divide error) del emulador al dividir entre cero}
+ 
+\textbf{Observaciones.} Al ejecutar \texttt{div cl} con CL = 00h el programa \textbf{no termina normalmente}: el emulador muestra un error de división (\textit{divide error}) y se detiene. La división entre cero no está definida, y el procesador responde generando la interrupción de tipo 0 en lugar de entregar un cociente.
+ 
+% ============================================================
+\section{Análisis de resultados}
+ 
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi})}
+ 
+  \item \textbf{Primer programa.}
+  \begin{itemize}
+    \item \textbf{Banderas con los datos originales.}
+    \begin{itemize}
+      \item \textit{Suma de bytes} (7Dh + 96h = 113h, AL = 13h). C = 1 porque 125 + 150 = 275 supera 255. A = 1 porque Dh + 6h = 13h acarrea del bit 3 al 4. O = 0 porque 7Dh es positivo ($+125$) y 96h es negativo ($-106$), y sumar números de signo distinto no desborda ($125 - 106 = 19$). S = 0 (el bit 7 de 13h es 0), Z = 0 y P = 0 (13h = 0001\,0011b tiene tres unos).
+      \item \textit{Suma de palabras} (20A3h + 5938h = 79DBh). C = 0 porque no se pasa de FFFFh. A = 0 porque 3h + 8h = Bh no acarrea. O = 0 porque dos positivos dan 79DBh, que sigue siendo positivo (menor que 8000h). S = 0, Z = 0 y P = 1 (el byte bajo DBh = 1101\,1011b tiene seis unos).
+    \end{itemize}
+    \item \textbf{Banderas con los datos del paso 12.} 9Dh + 83h = 120h, con C = 1 (157 + 131 = 288 > 255), O = 1 ($-99 - 125 = -224$ no cabe en un byte con signo) y A = 1. En 16 bits, 1732h + E8CEh = 10000h, con Z = 1 y P = 1 (el resultado de 16 bits es 0000h), C = 1 y O = 0 (sumar un número y su opuesto no desborda).
+    \item \textbf{¿Por qué cambiaron los resultados con \texttt{ADC} en lugar de \texttt{ADD}?} \texttt{ADD} calcula $\text{destino} + \text{fuente}$ y \texttt{ADC} calcula $\text{destino} + \text{fuente} + C$. Con C = 1 al inicio: 7Dh + 96h + 1 = 114h, es decir AL = 14h (en lugar de 13h). Como la primera suma vuelve a dejar C = 1, la segunda es 20A3h + 5938h + 1 = 79DCh (en lugar de 79DBh). Por eso \texttt{ADC} se usa para encadenar sumas de varios bytes: arrastra el acarreo de la parte baja a la parte alta.
+  \end{itemize}
+ 
+  \item \textbf{Segundo programa.}
+  \begin{itemize}
+    \item \textbf{C y A según el minuendo sea mayor o menor.} En la resta, C = 1 indica que hubo \emph{préstamo}: el minuendo es menor que el sustraendo y se tuvo que <<pedir prestado>> un 1 al bit siguiente al más significativo. Con 50h $-$ 45h (minuendo mayor) no hay préstamo y C = 0. Con 45h $-$ 50h (minuendo menor) se calcula (100h + 45h) $-$ 50h = F5h y C = 1. De forma análoga A = 1 cuando el nibble bajo del minuendo es menor que el del sustraendo: en 50h $-$ 45h, 0h < 5h, se pide prestado al nibble alto y A = 1; en 45h $-$ 50h, 5h $\geq$ 0h y A = 0 (el préstamo ocurre en el nibble alto, 4h < 5h, y por eso C = 1). Las restas de 16 bits siguen la misma lógica: 6745h $-$ 0145h no pide prestado (C = 0), mientras que 0145h $-$ 6745h = 10145h $-$ 6745h = 9A00h sí lo pide (C = 1).
+    \item \textbf{¿Por qué cambiaron los resultados con \texttt{SBB} en lugar de \texttt{SUB}?} \texttt{SBB} calcula $\text{destino} - \text{fuente} - C$, es decir, resta además el préstamo anterior. Con C = 0 la primera resta es igual que con \texttt{SUB} (0Bh y 6600h). En el orden invertido, la resta de bytes deja C = 1 y la siguiente es 0145h $-$ 6745h $-$ 1 = 99FFh (en lugar de 9A00h). Si C se activa a mano antes de cada resta, todos los resultados disminuyen en 1: 50h $-$ 45h $-$ 1 = 0Ah, 6745h $-$ 0145h $-$ 1 = 65FFh y 45h $-$ 50h $-$ 1 = F4h. Así, \texttt{SBB} permite encadenar restas de varios bytes.
+  \end{itemize}
+ 
+  \item \textbf{Tercer programa.}
+  \begin{itemize}
+    \item \textbf{¿Cómo se especifica que se trabaja con números de un byte?} Por el tamaño del operando que acompaña a la instrucción: \texttt{mul cl} tiene un operando de 8 bits (CL) y, por tanto, el otro factor está implícito en AL. Si el operando fuera de 16 bits (por ejemplo \texttt{mul cx}), se multiplicaría AX $\times$ CX.
+    \item \textbf{Registros que se usan.} El multiplicando va en AL, el multiplicador en un registro o posición de memoria de 8 bits (CL) y el producto de 16 bits queda en AX. (En multiplicaciones de 16 bits el producto queda en el par DX:AX.)
+    \item \textbf{¿Por qué cambiaron los resultados con \texttt{IMUL} en lugar de \texttt{MUL}?} Los bits son los mismos, pero la interpretación es distinta. Con 06: \texttt{MUL} calcula 255 $\times$ 6 = 1530 = 05FAh e \texttt{IMUL} calcula $(-1) \times 6 = -6$ = FFFAh. Con $-06$ (FAh): \texttt{MUL} calcula 255 $\times$ 250 = 63750 = F906h e \texttt{IMUL} calcula $(-1) \times (-6) = 6$ = 0006h. Además, con \texttt{MUL} se activan C y O porque AH $\neq$ 0, mientras que con \texttt{IMUL} se quedan en 0 porque el producto con signo cabe en AL.
+  \end{itemize}
+ 
+  \item \textbf{Cuarto programa.}
+  \begin{itemize}
+    \item \textbf{¿Cómo se especifica que se trabaja con números de un byte?} También por el tamaño del divisor: \texttt{div cl} tiene un divisor de 8 bits, por lo que el dividendo es AX. Con un divisor de 16 bits (por ejemplo \texttt{div cx}) el dividendo sería DX:AX.
+    \item \textbf{Registros que se usan.} Dividendo de 16 bits en AX, divisor de 8 bits en CL, cociente en AL y residuo en AH. (Con divisor de 16 bits: dividendo en DX:AX, cociente en AX y residuo en DX.)
+    \item \textbf{¿Por qué cambiaron los resultados con \texttt{IDIV} en lugar de \texttt{DIV}?} Con 05 ambas instrucciones dan lo mismo, porque todos los datos son positivos: 123 $\div$ 5 = 24 con residuo 3 (0318h). Con $-05$ cambian. \texttt{DIV} ve CL = FBh como 251 y calcula 123 $\div$ 251 = 0 con residuo 123 (AX = 7B00h). \texttt{IDIV} ve CL como $-5$ y calcula 123 $\div$ ($-5$) = $-24$ con residuo $+3$ (AL = E8h, AH = 03h, AX = 03E8h); se comprueba con $(-24)(-5) + 3 = 123$. El residuo de \texttt{IDIV} lleva el signo del dividendo.
+    \item \textbf{¿Por qué la última modificación generó un error?} Porque con CL = 00h se intenta dividir entre cero, y esa operación no está definida. El procesador genera la excepción de división (interrupción tipo 0) y el emulador detiene el programa. El mismo error ocurre si el cociente no cabe en AL (más de FFh con \texttt{DIV}, o fuera de $-128$ a $127$ con \texttt{IDIV}).
+  \end{itemize}
+\end{enumerate}
+ 
+% ============================================================
+\section{Investigación complementaria}
+ 
+\subsection{Directivas EQU y DB}
+ 
+\begin{table}[htbp]
+  \centering
+  \caption{Comparación entre las directivas \texttt{EQU} y \texttt{DB}.}
+  \label{tab:equ-db}
+  \begin{tabular}{|p{3.4cm}|p{5.2cm}|p{5.2cm}|}
+    \hline
+    \textbf{Característica} & \textbf{\texttt{EQU}} & \textbf{\texttt{DB}} \\
+    \hline
+    Qué hace & Asigna un nombre a un valor constante. & Reserva y asigna valor inicial a bytes de memoria. \\
+    \hline
+    Memoria & No reserva memoria: el ensamblador reemplaza el nombre por el valor. & Reserva 1 byte por cada valor. \\
+    \hline
+    Uso en la instrucción & Operando inmediato (\texttt{mov al, byte1} se ensambla como \texttt{mov al, 7Dh}). & Operando de memoria (direccionamiento directo): \texttt{mov al, dato}. \\
+    \hline
+    Modificable al ejecutar & No, es una constante. & Sí, se puede leer y escribir (\texttt{mov dato, al}). \\
+    \hline
+    Dirección & No tiene. & La etiqueta equivale al desplazamiento donde queda el dato. \\
+    \hline
+  \end{tabular}
+\end{table}
+ 
+\subsection{Multiplicación de dos números de dos bytes}
+ 
+Se usa la forma de 16 bits de \texttt{MUL} (o \texttt{IMUL} si hay signo): el multiplicando va en AX, el multiplicador en un registro de 16 bits y el producto de 32 bits queda en el par DX:AX (DX = parte alta, AX = parte baja).
+ 
+\begin{lstlisting}[style=asm]
+    mov ax, 1234h       ; multiplicando
+    mov bx, 0100h       ; multiplicador
+    mul bx              ; DX:AX = 1234h x 0100h = 0012 3400h
+\end{lstlisting}
+ 
+Como DX $\neq$ 0, las banderas C y O quedan en 1. También puede hacerse con registros de 8 bits mediante productos parciales: $(a_H 2^8 + a_L)(b_H 2^8 + b_L) = a_H b_H 2^{16} + (a_H b_L + a_L b_H) 2^8 + a_L b_L$, con cuatro \texttt{MUL} de 8 bits y sumas encadenadas con \texttt{ADC}.
+ 
+\subsection{División de dos números de dos bytes}
+ 
+Se usa la forma de 16 bits de \texttt{DIV} (o \texttt{IDIV}): el dividendo de 32 bits va en DX:AX, el divisor en un registro de 16 bits, el cociente queda en AX y el residuo en DX. Si el dividendo solo tiene 16 bits, hay que completar DX: con 0 para \texttt{DIV} (\texttt{xor dx, dx}) o con la extensión de signo para \texttt{IDIV} (\texttt{cwd}).
+ 
+\begin{lstlisting}[style=asm]
+    mov ax, 5000        ; dividendo (16 bits)
+    xor dx, dx          ; DX = 0, completa el dividendo a 32 bits
+    mov bx, 7           ; divisor
+    div bx              ; AX = 02CAh (714), DX = 0002h (residuo)
+\end{lstlisting}
+ 
+Se verifica con $714 \times 7 + 2 = 5000$. Igual que en 8 bits, hay error de división si el divisor es 0 o si el cociente no cabe en AX.
+ 
+\subsection{Suma de dos números de 4 bytes}
+ 
+Se suman A = 0012FFFFh y B = 00340001h. Como ningún registro del 8086 guarda 32 bits, la suma se hace por partes y el acarreo de cada parte se arrastra a la siguiente con \texttt{ADC}: la parte menos significativa se suma con \texttt{ADD} y las demás con \texttt{ADC}. En ambos casos el resultado esperado es R = 00470000h.
+ 
+\subsubsection{Con registros de 16 bits}
+ 
+Se suman dos palabras: primero la baja con \texttt{ADD} y luego la alta con \texttt{ADC}. Entre ambas solo hay instrucciones \texttt{MOV}, que no alteran C.
+ 
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+      term/.style={draw, rounded corners=9pt, minimum width=3.2cm, minimum height=0.65cm, align=center, font=\footnotesize},
+      caja/.style={draw, minimum width=7.6cm, minimum height=0.65cm, align=center, font=\footnotesize},
+      flecha/.style={->, >=stealth}]
+    \node[term] (n0) at (0,0)     {INICIO};
+    \node[caja] (n1) at (0,-1.1)  {AX $\leftarrow$ A$_{\mathrm{bajo}}$ (palabra baja de A)};
+    \node[caja] (n2) at (0,-2.2)  {AX $\leftarrow$ AX $+$ B$_{\mathrm{bajo}}$ \quad (\texttt{ADD}, genera C)};
+    \node[caja] (n3) at (0,-3.3)  {R$_{\mathrm{bajo}}$ $\leftarrow$ AX};
+    \node[caja] (n4) at (0,-4.4)  {AX $\leftarrow$ A$_{\mathrm{alto}}$ (palabra alta de A)};
+    \node[caja] (n5) at (0,-5.5)  {AX $\leftarrow$ AX $+$ B$_{\mathrm{alto}}$ $+$ C \quad (\texttt{ADC})};
+    \node[caja] (n6) at (0,-6.6)  {R$_{\mathrm{alto}}$ $\leftarrow$ AX};
+    \node[term] (n7) at (0,-7.7)  {FIN};
+    \foreach \a/\b in {n0/n1,n1/n2,n2/n3,n3/n4,n4/n5,n5/n6,n6/n7}
+      \draw[flecha] (\a) -- (\b);
+  \end{tikzpicture}
+  \caption{Diagrama de flujo de la suma de dos números de 4 bytes con registros de 16 bits.}
+  \label{fig:flujo16}
+\end{figure}
+ 
+\begin{lstlisting}[style=asm]
+#make_COM#
+org 100h
+INICIO:
+    mov ax, a_baja
+    add ax, b_baja      ; FFFFh + 0001h = 0000h, C = 1
+    mov r_baja, ax
+    mov ax, a_alta      ; MOV no altera C
+    adc ax, b_alta      ; 0012h + 0034h + 1 = 0047h
+    mov r_alta, ax
+    ret
+ 
+a_baja dw 0FFFFh
+a_alta dw 0012h
+b_baja dw 0001h
+b_alta dw 0034h
+r_baja dw 0
+r_alta dw 0
+END
+\end{lstlisting}
+ 
+\figuraimagen{inv-16bits.png}{Ejecución de la suma de 4 bytes con registros de 16 bits.}{fig:inv-16bits}{emulador con el resultado 0047h 0000h de la suma de 32 bits}
+ 
+\subsubsection{Con registros de 8 bits}
+ 
+Se suman cuatro bytes, del menos al más significativo: el primero con \texttt{ADD} y los otros tres con \texttt{ADC}.
+ 
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+      term/.style={draw, rounded corners=9pt, minimum width=3.2cm, minimum height=0.55cm, align=center, font=\footnotesize},
+      caja/.style={draw, minimum width=7.4cm, minimum height=0.55cm, align=center, font=\footnotesize},
+      flecha/.style={->, >=stealth}]
+    \node[term] (n0)  at (0,0)      {INICIO};
+    \node[caja] (n1)  at (0,-0.95)  {AL $\leftarrow$ A$_0$ (byte menos significativo de A)};
+    \node[caja] (n2)  at (0,-1.9)   {AL $\leftarrow$ AL $+$ B$_0$ \quad (\texttt{ADD}, genera C)};
+    \node[caja] (n3)  at (0,-2.85)  {R$_0$ $\leftarrow$ AL};
+    \node[caja] (n4)  at (0,-3.8)   {AL $\leftarrow$ A$_1$};
+    \node[caja] (n5)  at (0,-4.75)  {AL $\leftarrow$ AL $+$ B$_1$ $+$ C \quad (\texttt{ADC})};
+    \node[caja] (n6)  at (0,-5.7)   {R$_1$ $\leftarrow$ AL};
+    \node[caja] (n7)  at (0,-6.65)  {AL $\leftarrow$ A$_2$};
+    \node[caja] (n8)  at (0,-7.6)   {AL $\leftarrow$ AL $+$ B$_2$ $+$ C \quad (\texttt{ADC})};
+    \node[caja] (n9)  at (0,-8.55)  {R$_2$ $\leftarrow$ AL};
+    \node[caja] (n10) at (0,-9.5)   {AL $\leftarrow$ A$_3$ (byte más significativo de A)};
+    \node[caja] (n11) at (0,-10.45) {AL $\leftarrow$ AL $+$ B$_3$ $+$ C \quad (\texttt{ADC})};
+    \node[caja] (n12) at (0,-11.4)  {R$_3$ $\leftarrow$ AL};
+    \node[term] (n13) at (0,-12.35) {FIN};
+    \foreach \a/\b in {n0/n1,n1/n2,n2/n3,n3/n4,n4/n5,n5/n6,n6/n7,n7/n8,n8/n9,n9/n10,n10/n11,n11/n12,n12/n13}
+      \draw[flecha] (\a) -- (\b);
+  \end{tikzpicture}
+  \caption{Diagrama de flujo de la suma de dos números de 4 bytes con registros de 8 bits.}
+  \label{fig:flujo8}
+\end{figure}
+ 
+\begin{lstlisting}[style=asm]
+#make_COM#
+org 100h
+INICIO:
+    mov al, numA_0
+    add al, numB_0      ; FFh + 01h = 00h, C = 1
+    mov res_0, al
+    mov al, numA_1
+    adc al, numB_1      ; FFh + 00h + 1 = 00h, C = 1
+    mov res_1, al
+    mov al, numA_2
+    adc al, numB_2      ; 12h + 34h + 1 = 47h, C = 0
+    mov res_2, al
+    mov al, numA_3
+    adc al, numB_3      ; 00h + 00h + 0 = 00h
+    mov res_3, al
+    ret
+ 
+numA_0 db 0FFh
+numA_1 db 0FFh
+numA_2 db 12h
+numA_3 db 00h
+numB_0 db 01h
+numB_1 db 00h
+numB_2 db 34h
+numB_3 db 00h
+res_0  db 0
+res_1  db 0
+res_2  db 0
+res_3  db 0
+END
+\end{lstlisting}
+ 
+\figuraimagen{inv-8bits.png}{Ejecución de la suma de 4 bytes con registros de 8 bits.}{fig:inv-8bits}{emulador con los bytes 00h 00h 47h 00h del resultado}
+ 
+% ============================================================
+\section{Conclusiones}
+ 
+\begin{itemize}
+  \item \texttt{ADD} y \texttt{SUB} solo usan los operandos, mientras que \texttt{ADC} y \texttt{SBB} incluyen además el acarreo o préstamo previo. Por eso estas últimas permiten operar números más grandes que un registro, encadenando partes de menor a mayor peso.
+  \item La bandera C señala el desbordamiento de números \emph{sin signo} (acarreo en la suma, préstamo en la resta) y la bandera O el de números \emph{con signo}. Un mismo resultado puede activar una, la otra, ambas o ninguna: 9Dh $+$ 83h activó las dos, mientras que 7Dh $+$ 96h activó solo C.
+  \item En la resta, C = 1 indica préstamo (minuendo menor que sustraendo) y A = 1 indica préstamo entre nibbles; el resultado queda en complemento a 2 (45h $-$ 50h = F5h).
+  \item El tamaño de una multiplicación o división lo fija el operando: con un operando de 8 bits el otro dato está implícito en AL (\texttt{MUL}) o en AX (\texttt{DIV}); con uno de 16 bits se usa AX o DX:AX. El producto de \texttt{MUL} ocupa el doble de bits de los factores.
+  \item \texttt{MUL} y \texttt{DIV} interpretan los datos sin signo, e \texttt{IMUL} e \texttt{IDIV} con signo. Con los mismos bits (FFh y FAh) los resultados difieren: 1530 frente a $-6$ en la multiplicación, y 0 frente a $-24$ en la división. En \texttt{IDIV} el residuo lleva el signo del dividendo.
+  \item Dividir entre cero, o con un cociente que no cabe en el registro de destino, genera un error de ejecución (interrupción tipo 0).
+  \item \texttt{EQU} define constantes que el ensamblador sustituye en el código, mientras que \texttt{DB} reserva memoria con una dirección y un valor que se puede modificar.
+  \item Las instrucciones aritméticas modifican las banderas (O, S, Z, A, P, C) según el resultado, salvo \texttt{MUL}, \texttt{IMUL}, \texttt{DIV} e \texttt{IDIV}, que dejan indefinidas varias de ellas.
+\end{itemize}
+ 
+% ============================================================
+\section{Bibliografía}
+ 
+% Completa cada entrada con la edición, el año o la URL de la fuente que realmente consultaste.
+\begin{itemize}
+  \item Guía de laboratorio de Arquitectura de Computadoras, Práctica 5: Programación para el microprocesador INTEL, instrucciones aritméticas. Escuela Profesional de Ingeniería de Sistemas.
+  \item Brey, B. B. \emph{Los microprocesadores Intel}. Pearson Educación.
+  \item Intel Corporation. \emph{The 8086 Family User's Manual}.
+  \item Documentación (ayuda) del emulador EMU8086.
+\end{itemize}
+
+\end{document}
