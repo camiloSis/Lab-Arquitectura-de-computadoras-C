@@ -8,6 +8,7 @@
 \usepackage{setspace}
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{minted}
 \usepackage{tikz}
 \usetikzlibrary{circuits.logic.US,babel}
 
@@ -48,7 +49,12 @@
   showstringspaces=false,
   tabsize=4
 }
- 
+%---- MINTED..----- 
+
+\usepackage{xcolor}
+\usepackage{minted}
+\definecolor{bg}{rgb}{0.90,0.91,0.83}
+
 \providecommand{\espacioimagen}[1]{%
   \fbox{\parbox[c][4.5cm][c]{0.9\linewidth}{\centering\itshape Insertar captura: #1}}}
  
@@ -474,24 +480,12 @@ Se restauró \texttt{ADD} y se cambiaron los datos por: \texttt{byte1 equ 9Dh}, 
   \item El programa no copia los resultados a memoria: quedan en los registros CL y DX.
 \end{itemize}
  
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-byte1 equ 80
-byte2 equ 69
-word1 equ 26437
-word2 equ 325
- 
-    mov cl, byte1       ; resta de 2 numeros de 1 byte
-    sub cl, byte2       ; CL = 50h - 45h = 0Bh
- 
-    mov dx, word1       ; resta de 2 numeros de 2 bytes
-    sub dx, word2       ; DX = 6745h - 0145h = 6600h
-    ret
-END
-\end{lstlisting}
- 
-\figuraimagen{p2-codigo.png}{Código del segundo programa en el editor de EMU8086.}{fig:p2-codigo}{código fuente del segundo programa}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/15.png}
+    \caption{Código del segundo programa en el editor de EMU8086.}
+    \label{fig: primerP_modificado.asm}
+\end{figure}
  
 \begin{table}[htbp]
   \centering
@@ -519,25 +513,25 @@ END
   \item Se invirtió el orden de la operación, de modo que el minuendo pasa a ser sustraendo y viceversa (\textbf{2.ª prueba}, \texttt{SUB}):
 \end{itemize}
  
-\begin{lstlisting}[style=asm]
-    mov cl, byte2       ; ahora byte2 es el minuendo
-    sub cl, byte1       ; CL = 45h - 50h = F5h (hay prestamo)
-    mov dx, word2
-    sub dx, word1       ; DX = 0145h - 6745h = 9A00h
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/15(1).png}
+    \caption{Orden de operación invertido en el segundo programa.}
+    \label{fig: segundoP_invertido.asm}
+\end{figure}
  
 \begin{itemize}
   \item Se restauró el programa original y se sustituyeron las instrucciones \texttt{SUB} por \texttt{SBB}, repitiendo las dos pruebas (\textbf{3.ª y 4.ª prueba}):
 \end{itemize}
  
-\begin{lstlisting}[style=asm]
-    mov cl, byte1
-    sbb cl, byte2       ; CL = CL - byte2 - C
-    mov dx, word1
-    sbb dx, word2       ; DX = DX - word2 - C
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/15(2).png}
+    \caption{Sustitución de las instrucciones \textit{SUB} por \textit{SBB}.}
+    \label{fig: segundoP_invertido.asm}
+\end{figure}
  
-\begin{table}[htbp]
+\begin{table}[H]
   \centering
   \small
   \setlength{\tabcolsep}{3pt}
@@ -565,15 +559,8 @@ END
     \hline
   \end{tabular}
 \end{table}
- 
-\figuraimagen{p2-sub1.png}{Registros y banderas después de las restas con \texttt{SUB} (1.ª prueba).}{fig:p2-sub1}{emulador después de las dos restas SUB en el orden original}
- 
-\figuraimagen{p2-sub2.png}{Registros y banderas con \texttt{SUB} en orden invertido (2.ª prueba).}{fig:p2-sub2}{emulador después de las restas SUB con minuendo y sustraendo invertidos}
- 
-\figuraimagen{p2-sbb3.png}{Registros y banderas con \texttt{SBB} en el orden original (3.ª prueba).}{fig:p2-sbb3}{emulador después de las restas SBB en el orden original}
- 
-\figuraimagen{p2-sbb4.png}{Registros y banderas con \texttt{SBB} en orden invertido (4.ª prueba).}{fig:p2-sbb4}{emulador después de las restas SBB con minuendo y sustraendo invertidos}
- 
+
+
 \subsubsection{Acarreo activado manualmente}
  
 Se repitieron las pruebas activando manualmente la bandera C antes de cada resta (equivale a insertar \texttt{stc} antes de cada \texttt{sub} o \texttt{sbb}).
@@ -606,8 +593,34 @@ Se repitieron las pruebas activando manualmente la bandera C antes de cada resta
     \hline
   \end{tabular}
 \end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/15(3).png}
+    \caption{Registros y banderas después de las restas con \texttt{SUB}.}
+    \label{fig: segundoP.asm}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/15(4).png}
+    \caption{Registros y banderas con \texttt{SUB} en orden invertido.}
+    \label{fig: segundoP_invertido.asm}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/15(5).png}
+    \caption{Registros y banderas con \texttt{SBB} en el orden original.}
+    \label{fig: segundoP_sbb.asm}
+\end{figure}
  
-\figuraimagen{p2-acarreo.png}{Resultados de las restas con el acarreo activado manualmente.}{fig:p2-acarreo}{emulador con C=1 antes de las restas SUB y SBB}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/15(6).png}
+    \caption{Registros y banderas con \texttt{SBB} en orden invertido.}
+    \label{fig: segundoP_sbb_invertido.asm}
+\end{figure}
  
 \textbf{Observaciones.}
 \begin{itemize}
@@ -628,19 +641,12 @@ Se repitieron las pruebas activando manualmente la bandera C antes de cada resta
   \item \texttt{mul cl}: AX = AL $\times$ CL = FFh $\times$ 06h = 05FAh (255 $\times$ 6 = 1530).
 \end{itemize}
  
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-INICIO:
-    mov ah, 0AAh        ; multiplica 2 numeros de 1 byte
-    mov al, 0FFh        ; multiplicando
-    mov cl, 06          ; multiplicador (dato)
-    mul cl              ; AX = AL x CL
-    ret
-END
-\end{lstlisting}
- 
-\figuraimagen{p3-codigo.png}{Código del tercer programa en el editor de EMU8086.}{fig:p3-codigo}{código fuente del tercer programa}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/16.png}
+    \caption{Código del tercer programa en el editor de EMU8086}
+    \label{fig: tercerP.asm}
+\end{figure}
  
 \textbf{Respuestas a las preguntas de la guía.}
 \begin{itemize}
@@ -674,14 +680,34 @@ END
   \smallskip
   {\small La columna C/O no la pide la guía, pero ayuda en el análisis. Las demás banderas quedan indefinidas.}
 \end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/16(1).png}
+    \caption{Resultado de \texttt{mul cl} con CL = 06.}
+    \label{fig: tercerP.asm}
+\end{figure}
  
-\figuraimagen{p3-mul.png}{Resultado de \texttt{mul cl} con CL = 06.}{fig:p3-mul}{emulador después de mul cl con 06}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/16(2).png}
+    \caption{Resultado de \texttt{mul cl} con CL = $-06$ (FAh).}
+    \label{fig: tercerP_negative.asm}
+\end{figure}
  
-\figuraimagen{p3-mul-neg.png}{Resultado de \texttt{mul cl} con CL = $-06$ (FAh).}{fig:p3-mul-neg}{emulador después de mul cl con -06}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/16(3).png}
+    \caption{Resultado de \texttt{imul cl} con CL = 06.}
+    \label{fig: tercerP_imul.asm}
+\end{figure}
  
-\figuraimagen{p3-imul.png}{Resultado de \texttt{imul cl} con CL = 06.}{fig:p3-imul}{emulador después de imul cl con 06}
- 
-\figuraimagen{p3-imul-neg.png}{Resultado de \texttt{imul cl} con CL = $-06$ (FAh).}{fig:p3-imul-neg}{emulador después de imul cl con -06}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/16(4).png}
+    \caption{Resultado de \texttt{imul cl} con CL = $-06$ (FAh).}
+    \label{fig: tercerP_imul_negative.asm}
+\end{figure}
  
 \textbf{Observaciones.} Los datos son los mismos bits en las cuatro pruebas (FFh y 06h o FAh), pero \texttt{MUL} los interpreta como números sin signo e \texttt{IMUL} como números con signo, y por eso los productos son distintos. Con \texttt{MUL} la parte alta del producto (AH $\neq$ 0) activa C y O. Con \texttt{IMUL} el producto con signo cabe en AL, así que C y O quedan en 0.
  
@@ -697,19 +723,13 @@ END
   \item \texttt{div cl}: AL = cociente = 123 $\div$ 5 = 24 (18h) y AH = residuo = 3 (03h). AX queda en 0318h.
 \end{itemize}
  
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-INICIO:
-    mov ax, 123         ; dividendo de 16 bits
-    mov cl, 05          ; divisor (dato)
-    div cl              ; AL = AX / CL (cociente), AH = AX mod CL (residuo)
-    ret
-END
-\end{lstlisting}
- 
-\figuraimagen{p4-codigo.png}{Código del cuarto programa en el editor de EMU8086.}{fig:p4-codigo}{código fuente del cuarto programa}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.86\textwidth]{img/17.png}
+    \caption{Código del cuarto programa en el editor de EMU8086.}
+    \label{fig: cuartoP.asm}
+\end{figure}
+  
 \textbf{Respuestas a las preguntas de la guía.}
 \begin{itemize}
   \item \textit{¿Qué registros están involucrados?} AX (dividendo), CL (divisor), AL (cociente) y AH (residuo).
@@ -743,19 +763,20 @@ END
   {\small Las banderas quedan indefinidas después de \texttt{DIV} e \texttt{IDIV}.}
 \end{table}
  
-\figuraimagen{p4-div.png}{Resultado de \texttt{div cl} con CL = 05.}{fig:p4-div}{emulador después de div cl con 05}
- 
-\figuraimagen{p4-div-neg.png}{Resultado de \texttt{div cl} con CL = $-05$ (FBh).}{fig:p4-div-neg}{emulador después de div cl con -05}
- 
-\figuraimagen{p4-idiv.png}{Resultado de \texttt{idiv cl} con CL = 05.}{fig:p4-idiv}{emulador después de idiv cl con 05}
- 
-\figuraimagen{p4-idiv-neg.png}{Resultado de \texttt{idiv cl} con CL = $-05$ (FBh).}{fig:p4-idiv-neg}{emulador después de idiv cl con -05}
- 
+\begin{itemize}
+    \item \textit{No se adjuntan imágenes de los resultados de las modificaciones del cuarto programa porque el comportamiento es muy similar al del tercer programa.} 
+\end{itemize}
+
 \subsubsection{Divisor igual a cero}
  
 Se cambió el dato por 00h (\texttt{mov cl, 00h}) y se ejecutó el programa.
  
-\figuraimagen{p4-error.png}{Error del emulador al dividir entre 00h.}{fig:p4-error}{mensaje de error (divide error) del emulador al dividir entre cero}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/18.png}
+    \caption{Error del emulador al dividir entre 00h.}
+    \label{fig: cuartoP_divisorCero.asm}
+\end{figure}
  
 \textbf{Observaciones.} Al ejecutar \texttt{div cl} con CL = 00h el programa \textbf{no termina normalmente}: el emulador muestra un error de división (\textit{divide error}) y se detiene. La división entre cero no está definida, y el procesador responde generando la interrupción de tipo 0 en lugar de entregar un cociente.
  
@@ -828,11 +849,11 @@ Se cambió el dato por 00h (\texttt{mov cl, 00h}) y se ejecutó el programa.
  
 Se usa la forma de 16 bits de \texttt{MUL} (o \texttt{IMUL} si hay signo): el multiplicando va en AX, el multiplicador en un registro de 16 bits y el producto de 32 bits queda en el par DX:AX (DX = parte alta, AX = parte baja).
  
-\begin{lstlisting}[style=asm]
+\begin{minted}[linenos,frame=lines,bgcolor=bg,breaklines,fontsize=\small]{nasm}
     mov ax, 1234h       ; multiplicando
     mov bx, 0100h       ; multiplicador
     mul bx              ; DX:AX = 1234h x 0100h = 0012 3400h
-\end{lstlisting}
+\end{minted}
  
 Como DX $\neq$ 0, las banderas C y O quedan en 1. También puede hacerse con registros de 8 bits mediante productos parciales: $(a_H 2^8 + a_L)(b_H 2^8 + b_L) = a_H b_H 2^{16} + (a_H b_L + a_L b_H) 2^8 + a_L b_L$, con cuatro \texttt{MUL} de 8 bits y sumas encadenadas con \texttt{ADC}.
  
@@ -840,12 +861,12 @@ Como DX $\neq$ 0, las banderas C y O quedan en 1. También puede hacerse con reg
  
 Se usa la forma de 16 bits de \texttt{DIV} (o \texttt{IDIV}): el dividendo de 32 bits va en DX:AX, el divisor en un registro de 16 bits, el cociente queda en AX y el residuo en DX. Si el dividendo solo tiene 16 bits, hay que completar DX: con 0 para \texttt{DIV} (\texttt{xor dx, dx}) o con la extensión de signo para \texttt{IDIV} (\texttt{cwd}).
  
-\begin{lstlisting}[style=asm]
+\begin{minted}[linenos,frame=lines,bgcolor=bg,breaklines,fontsize=\small]{nasm}
     mov ax, 5000        ; dividendo (16 bits)
     xor dx, dx          ; DX = 0, completa el dividendo a 32 bits
     mov bx, 7           ; divisor
     div bx              ; AX = 02CAh (714), DX = 0002h (residuo)
-\end{lstlisting}
+\end{minted}
  
 Se verifica con $714 \times 7 + 2 = 5000$. Igual que en 8 bits, hay error de división si el divisor es 0 o si el cociente no cabe en AX.
  
@@ -878,29 +899,13 @@ Se suman dos palabras: primero la baja con \texttt{ADD} y luego la alta con \tex
   \label{fig:flujo16}
 \end{figure}
  
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-INICIO:
-    mov ax, a_baja
-    add ax, b_baja      ; FFFFh + 0001h = 0000h, C = 1
-    mov r_baja, ax
-    mov ax, a_alta      ; MOV no altera C
-    adc ax, b_alta      ; 0012h + 0034h + 1 = 0047h
-    mov r_alta, ax
-    ret
- 
-a_baja dw 0FFFFh
-a_alta dw 0012h
-b_baja dw 0001h
-b_alta dw 0034h
-r_baja dw 0
-r_alta dw 0
-END
-\end{lstlisting}
- 
-\figuraimagen{inv-16bits.png}{Ejecución de la suma de 4 bytes con registros de 16 bits.}{fig:inv-16bits}{emulador con el resultado 0047h 0000h de la suma de 32 bits}
- 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/19.png}
+    \caption{Ejecución de la suma de 4 bytes con registros de 16 bits.}
+    \label{fig: suma4bytes.asm}
+\end{figure}
+  
 \subsubsection{Con registros de 8 bits}
  
 Se suman cuatro bytes, del menos al más significativo: el primero con \texttt{ADD} y los otros tres con \texttt{ADC}.
@@ -931,41 +936,13 @@ Se suman cuatro bytes, del menos al más significativo: el primero con \texttt{A
   \caption{Diagrama de flujo de la suma de dos números de 4 bytes con registros de 8 bits.}
   \label{fig:flujo8}
 \end{figure}
- 
-\begin{lstlisting}[style=asm]
-#make_COM#
-org 100h
-INICIO:
-    mov al, numA_0
-    add al, numB_0      ; FFh + 01h = 00h, C = 1
-    mov res_0, al
-    mov al, numA_1
-    adc al, numB_1      ; FFh + 00h + 1 = 00h, C = 1
-    mov res_1, al
-    mov al, numA_2
-    adc al, numB_2      ; 12h + 34h + 1 = 47h, C = 0
-    mov res_2, al
-    mov al, numA_3
-    adc al, numB_3      ; 00h + 00h + 0 = 00h
-    mov res_3, al
-    ret
- 
-numA_0 db 0FFh
-numA_1 db 0FFh
-numA_2 db 12h
-numA_3 db 00h
-numB_0 db 01h
-numB_1 db 00h
-numB_2 db 34h
-numB_3 db 00h
-res_0  db 0
-res_1  db 0
-res_2  db 0
-res_3  db 0
-END
-\end{lstlisting}
- 
-\figuraimagen{inv-8bits.png}{Ejecución de la suma de 4 bytes con registros de 8 bits.}{fig:inv-8bits}{emulador con los bytes 00h 00h 47h 00h del resultado}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.91\textwidth]{img/19(1).png}
+    \caption{Ejecución de la suma de 4 bytes con registros de 8 bits.}
+    \label{fig: suma4bytes_8bits.asm}
+\end{figure}
  
 % ============================================================
 \section{Conclusiones}

@@ -1,0 +1,5 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{    }\PYG{n+nf}{mov}\PYG{+w}{ }\PYG{n+nb}{ax}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mh}{1234h}\PYG{+w}{       }\PYG{c+c1}{; multiplicando}
+\PYG{+w}{    }\PYG{n+nf}{mov}\PYG{+w}{ }\PYG{n+nb}{bx}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mh}{0100h}\PYG{+w}{       }\PYG{c+c1}{; multiplicador}
+\PYG{+w}{    }\PYG{n+nf}{mul}\PYG{+w}{ }\PYG{n+nb}{bx}\PYG{+w}{              }\PYG{c+c1}{; DX:AX = 1234h x 0100h = 0012 3400h}
+\end{MintedVerbatim}

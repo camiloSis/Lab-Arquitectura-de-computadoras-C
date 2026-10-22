@@ -8,17 +8,17 @@
 \contentsline {subsubsection}{\numberline {3.2.2}Variante con \texttt {ADC}}{7}{subsubsection.3.2.2}%
 \contentsline {subsubsection}{\numberline {3.2.3}Datos modificados}{9}{subsubsection.3.2.3}%
 \contentsline {subsection}{\numberline {3.3}Segundo programa: resta con SUB y SBB}{10}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Acarreo activado manualmente}{11}{subsubsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.4}Tercer programa: multiplicación con MUL e IMUL}{14}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Cuarto programa: división con DIV e IDIV}{16}{subsection.3.5}%
-\contentsline {subsubsection}{\numberline {3.5.1}Divisor igual a cero}{17}{subsubsection.3.5.1}%
-\contentsline {section}{\numberline {4}Análisis de resultados}{17}{section.4}%
-\contentsline {section}{\numberline {5}Investigación complementaria}{20}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Directivas EQU y DB}{20}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Multiplicación de dos números de dos bytes}{20}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}División de dos números de dos bytes}{20}{subsection.5.3}%
-\contentsline {subsection}{\numberline {5.4}Suma de dos números de 4 bytes}{21}{subsection.5.4}%
-\contentsline {subsubsection}{\numberline {5.4.1}Con registros de 16 bits}{21}{subsubsection.5.4.1}%
-\contentsline {subsubsection}{\numberline {5.4.2}Con registros de 8 bits}{22}{subsubsection.5.4.2}%
-\contentsline {section}{\numberline {6}Conclusiones}{24}{section.6}%
-\contentsline {section}{\numberline {7}Bibliografía}{24}{section.7}%
+\contentsline {subsubsection}{\numberline {3.3.1}Acarreo activado manualmente}{13}{subsubsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.4}Tercer programa: multiplicación con MUL e IMUL}{15}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Cuarto programa: división con DIV e IDIV}{18}{subsection.3.5}%
+\contentsline {subsubsection}{\numberline {3.5.1}Divisor igual a cero}{19}{subsubsection.3.5.1}%
+\contentsline {section}{\numberline {4}Análisis de resultados}{20}{section.4}%
+\contentsline {section}{\numberline {5}Investigación complementaria}{21}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Directivas EQU y DB}{21}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Multiplicación de dos números de dos bytes}{21}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}División de dos números de dos bytes}{22}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Suma de dos números de 4 bytes}{22}{subsection.5.4}%
+\contentsline {subsubsection}{\numberline {5.4.1}Con registros de 16 bits}{22}{subsubsection.5.4.1}%
+\contentsline {subsubsection}{\numberline {5.4.2}Con registros de 8 bits}{23}{subsubsection.5.4.2}%
+\contentsline {section}{\numberline {6}Conclusiones}{25}{section.6}%
+\contentsline {section}{\numberline {7}Bibliografía}{25}{section.7}%

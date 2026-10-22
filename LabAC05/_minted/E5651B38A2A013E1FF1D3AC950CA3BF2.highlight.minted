@@ -1,0 +1,6 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{    }\PYG{n+nf}{mov}\PYG{+w}{ }\PYG{n+nb}{ax}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{5000}\PYG{+w}{        }\PYG{c+c1}{; dividendo (16 bits)}
+\PYG{+w}{    }\PYG{n+nf}{xor}\PYG{+w}{ }\PYG{n+nb}{dx}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{dx}\PYG{+w}{          }\PYG{c+c1}{; DX = 0, completa el dividendo a 32 bits}
+\PYG{+w}{    }\PYG{n+nf}{mov}\PYG{+w}{ }\PYG{n+nb}{bx}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{+w}{           }\PYG{c+c1}{; divisor}
+\PYG{+w}{    }\PYG{n+nf}{div}\PYG{+w}{ }\PYG{n+nb}{bx}\PYG{+w}{              }\PYG{c+c1}{; AX = 02CAh (714), DX = 0002h (residuo)}
+\end{MintedVerbatim}
